@@ -26,6 +26,7 @@ Dee is the Whitakers dragonfly mascot, set up the same way as Suni in my247tutor
 
 - `api/dee.js` sends the conversation to Claude (`claude-opus-5-5`) with the Whitakers prompt in `lib/deePrompt.js`.
 - `api/speech.js` gives Dee the same Australian Azure voice as my247tutor (`en-AU-NatashaNeural`). Without Azure keys Dee uses the visitor's device voice.
+- `api/book.js` takes appointment requests from Dee's chat (day and time within opening hours) and emails them to the shop.
 - Opened as plain files or in the Claude preview, there's no server, so Dee falls back to pre-written replies.
 
 ### Deploy on Vercel
@@ -33,4 +34,5 @@ Dee is the Whitakers dragonfly mascot, set up the same way as Suni in my247tutor
 2. Add environment variables:
    - `ANTHROPIC_API_KEY` (required for live replies)
    - `AZURE_SPEECH_KEY` and `AZURE_SPEECH_REGION` (optional, for the Australian cloud voice; you can reuse the my247tutor ones)
+   - `RESEND_API_KEY` and `BOOKING_TO` (optional, so "Book an appointment" in Dee's chat emails the request to the shop; `BOOKING_FROM` sets the sender once a domain is verified in Resend). Without them Dee says the request wasn't sent.
 3. Deploy.

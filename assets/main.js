@@ -80,6 +80,7 @@
   var specialise = "We turn old and inherited jewellery into modern pieces you'll actually wear. Tell me what you've got, or send me a photo, and I'll show you what it could become.";
   var topics = [
     ['photo', 'Send Dee a photo'],
+    ['book', 'Book an appointment'],
     ['remodel', 'Redesign old jewellery'],
     ['engagement', "I'm planning an engagement"],
     ['wedding', 'I need wedding bands'],
@@ -95,6 +96,7 @@
     repairs: 'We handle repairs, resizing, valuations and insurance replacements. Call us on 02 4927 0100 or pop into the Charlestown showroom.',
     hours: "We're open Tuesday to Friday 10am to 5pm and Saturday 9am to 3pm, at 212 Pacific Highway, Charlestown. You don't need to come in to get started though. A photo is enough.",
     photo: "Thanks for the photo! The team will have a proper look and send you some ideas for what it could become. Leave your details on the start page so we know where to send them.",
+    book: "Of course! Pick a day and time that suits you, and the team will confirm it with you. We're open Tuesday to Friday 10am to 5pm and Saturday 9am to 3pm.",
     free: "Thanks! The team will be happy to help with that. Leave your details on the start page and we'll be in touch within one business day, or call 02 4927 0100."
   };
   function pick(text) {
@@ -189,6 +191,7 @@
 
   // ---------- Markup ----------
   var CAMERA = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>';
+  var GALLERY = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3.5" y="5" width="17" height="14" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M4 17l5-4.5 3.5 3 3-2.5L20 17"/></svg>';
   var root = document.createElement('div');
   root.className = 'dee-companion';
   root.innerHTML =
@@ -198,8 +201,10 @@
         '<button type="button" class="dee-close" aria-label="Close chat with Dee">&times;</button></div></div>' +
       '<div class="dee-msgs" aria-live="polite"></div>' +
       '<p class="dee-mic-status" hidden></p>' +
-      '<form><input type="text" id="dee-text" placeholder="Ask Dee..." aria-label="Message to Dee" autocomplete="off" maxlength="1000">' +
-        '<button type="button" class="dee-photo" aria-label="Send Dee a photo" title="Send a photo">' + CAMERA + '</button>' +
+      '<form class="dee-form"><input type="text" id="dee-text" placeholder="Ask Dee..." aria-label="Message to Dee" autocomplete="off" maxlength="1000">' +
+        '<button type="button" class="dee-photo" aria-label="Take a photo for Dee" title="Take a photo">' + CAMERA + '</button>' +
+        '<button type="button" class="dee-gallery" aria-label="Choose a photo to send Dee" title="Choose a photo">' + GALLERY + '</button>' +
+        '<input type="file" class="dee-cam" accept="image/*" capture="environment" hidden>' +
         '<input type="file" class="dee-file" accept="image/*" hidden>' +
         (Recognition ? '<button type="button" class="dee-mic" aria-label="Hold to talk to Dee" title="Hold to talk">' +
           '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>' : '') +
@@ -217,13 +222,15 @@
   var msgs = root.querySelector('.dee-msgs');
   var bubble = root.querySelector('.dee-bubble');
   var fly = root.querySelector('.dee-fly');
-  var form = root.querySelector('form');
+  var form = root.querySelector('.dee-form');
   var input = root.querySelector('#dee-text');
   var sendBtn = root.querySelector('.dee-send');
   var voiceBtn = root.querySelector('.dee-voice');
   var micBtn = root.querySelector('.dee-mic');
   var photoBtn = root.querySelector('.dee-photo');
   var fileInput = root.querySelector('.dee-file');
+  var camInput = root.querySelector('.dee-cam');
+  var galleryBtn = root.querySelector('.dee-gallery');
   var micStatus = root.querySelector('.dee-mic-status');
   var started = false, busy = false, live = true;
   var turns = [];
@@ -280,7 +287,8 @@
   function reply(text) {
     var link = /photo|start page|details|book|showroom/i.test(text);
     if (msgs.lastChild) msgs.removeChild(msgs.lastChild);
-    add('dee', text, { link: link });
+    var d = add('dee', text, { link: link });
+    if (/appointment|book|showroom|come in|visit/i.test(text)) d.insertAdjacentHTML('beforeend', '<br><button type="button" class="dee-book-btn">Book an appointment</button>');
     turns.push({ role: 'assistant', content: text });
     say(text);
     setBusy(false);
@@ -299,6 +307,7 @@
     text = (text || '').trim();
     if ((!text && !image) || busy) return;
     stopTalking();
+    if (!image && BOOKING.test(text)) return startBooking(text);
     if (image) {
       text = text || "Here's a photo of my jewellery. What could you make from it?";
       add('you', text, { image: image });
@@ -352,6 +361,108 @@
   }
   function choosePhoto() { setOpen(true, true); fileInput.value = ''; fileInput.click(); }
 
+  // ---------- Camera: phones open their own camera app; computers show the webcam right in the chat ----------
+  var coarse = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+  function takePhoto() {
+    setOpen(true, true);
+    if (coarse || !(navigator.mediaDevices && navigator.mediaDevices.getUserMedia)) { camInput.value = ''; return camInput.click(); }
+    if (chat.querySelector('.dee-camera')) return;
+    var box = document.createElement('div');
+    box.className = 'dee-camera';
+    box.innerHTML = '<video playsinline autoplay muted></video><div class="dee-camera__bar">' +
+      '<button type="button" class="dee-camera__cancel">Cancel</button><button type="button" class="dee-camera__snap">Take photo</button></div>';
+    var video = box.querySelector('video'), stream = null;
+    var close = function () { if (stream) stream.getTracks().forEach(function (t) { t.stop(); }); if (box.parentNode) box.parentNode.removeChild(box); };
+    box.querySelector('.dee-camera__cancel').addEventListener('click', close);
+    box.querySelector('.dee-camera__snap').addEventListener('click', function () {
+      if (!video.videoWidth) return;
+      var scale = Math.min(1, 1024 / Math.max(video.videoWidth, video.videoHeight));
+      var c = document.createElement('canvas');
+      c.width = Math.round(video.videoWidth * scale); c.height = Math.round(video.videoHeight * scale);
+      c.getContext('2d').drawImage(video, 0, 0, c.width, c.height);
+      close();
+      var caption = input.value; input.value = '';
+      ask(caption, c.toDataURL('image/jpeg', 0.82));
+    });
+    chat.appendChild(box);
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment', width: { ideal: 1280 } }, audio: false })
+      .then(function (s) { stream = s; video.srcObject = s; })
+      .catch(function () {
+        close();
+        add('dee', "I couldn't open your camera here, so pick a photo instead.");
+        choosePhoto();
+      });
+  }
+
+  // ---------- Booking an appointment, right in the chat ----------
+  var DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  function slotsFor(day) {
+    // Tuesday to Friday 10am to 5pm, Saturday 9am to 3pm: appointments start on the half hour, finishing before close
+    var open = day >= 2 && day <= 5 ? [10, 16.5] : day === 6 ? [9, 14.5] : null, out = [];
+    if (!open) return out;
+    for (var h = open[0]; h <= open[1]; h += 0.5) out.push(h);
+    return out;
+  }
+  function timeLabel(h) { var hr = Math.floor(h), m = h % 1 ? '30' : '00'; return ((hr + 11) % 12 + 1) + ':' + m + (hr < 12 ? 'am' : 'pm'); }
+  function iso(d) { return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); }
+  function showBooking() {
+    setOpen(true, true);
+    var old = msgs.querySelector('.dee-bookform'); if (old) old.parentNode.removeChild(old);
+    var tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate() + 1);
+    var f = document.createElement('form');
+    f.className = 'msg msg--dee dee-bookform';
+    f.innerHTML =
+      '<strong>Book an appointment</strong>' +
+      '<label>Your name<input name="name" required autocomplete="name"></label>' +
+      '<label>Phone<input name="phone" type="tel" autocomplete="tel"></label>' +
+      '<label>Email<input name="email" type="email" autocomplete="email"></label>' +
+      '<label>What for?<select name="reason"><option>Redesign old jewellery</option><option>Engagement ring</option><option>Wedding bands</option><option>Repairs or a valuation</option><option>Something else</option></select></label>' +
+      '<div class="dee-bookform__row"><label>Day<input name="date" type="date" required min="' + iso(tomorrow) + '"></label>' +
+      '<label>Time<select name="time" required disabled><option value="">Pick a day first</option></select></label></div>' +
+      '<p class="dee-bookform__note" aria-live="polite"></p>' +
+      '<button type="submit" class="dee-bookform__go">Request this time</button>';
+    var date = f.elements.date, time = f.elements.time, note = f.querySelector('.dee-bookform__note');
+    date.addEventListener('change', function () {
+      var d = date.value ? new Date(date.value + 'T12:00') : null, slots = d ? slotsFor(d.getDay()) : [];
+      time.innerHTML = slots.length ? slots.map(function (h) { return '<option value="' + timeLabel(h) + '">' + timeLabel(h) + '</option>'; }).join('') : '<option value="">Closed that day</option>';
+      time.disabled = !slots.length;
+      note.textContent = d && !slots.length ? "We're closed on Sundays and Mondays. Pick a day from Tuesday to Saturday." : '';
+    });
+    f.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var v = {}; ['name', 'phone', 'email', 'reason', 'date', 'time'].forEach(function (k) { v[k] = (f.elements[k].value || '').trim(); });
+      if (!v.phone && !v.email) { note.textContent = 'Add a phone number or an email so the team can confirm.'; return; }
+      if (!v.time) { note.textContent = 'Pick a day from Tuesday to Saturday, then a time.'; return; }
+      var d = new Date(v.date + 'T12:00');
+      var when = DAYS[d.getDay()] + ' ' + d.getDate() + ' ' + MONTHS[d.getMonth()] + ' at ' + v.time;
+      f.querySelector('.dee-bookform__go').disabled = true;
+      var done = function (state) {
+        f.parentNode.removeChild(f);
+        add('you', 'Book ' + when + ' for ' + v.reason.toLowerCase() + '.');
+        var line = state === 'failed'
+          ? "Sorry, I couldn't send that request just now. Please call the team on 02 4927 0100 and they'll book you in."
+          : state === 'sent'
+          ? 'Thanks, ' + v.name.split(' ')[0] + "! I've sent your request for " + when + '. The team will confirm with you shortly.'
+          : 'Thanks, ' + v.name.split(' ')[0] + "! I've noted " + when + '. (This preview isn\'t connected to the shop yet, so the request hasn\'t been sent.)';
+        add('dee', line);
+        turns.push({ role: 'assistant', content: line });
+        say(line);
+      };
+      fetch('api/book', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(v) })
+        .then(function (r) { done(r.ok ? 'sent' : r.status === 502 || r.status === 400 ? 'failed' : 'offline'); }).catch(function () { done('offline'); });
+    });
+    msgs.appendChild(f);
+    msgs.scrollTop = msgs.scrollHeight;
+    f.elements.name.focus();
+  }
+  var BOOKING = /\b(book|booking|appointment|come in|visit the (shop|store|showroom))\b/i;
+  function startBooking(text) {
+    if (text) { add('you', text); turns.push({ role: 'user', content: text }); }
+    add('dee', scripted.book); turns.push({ role: 'assistant', content: scripted.book }); say(scripted.book);
+    showBooking();
+  }
+
   function greet() {
     started = true;
     var t = typing();
@@ -397,7 +508,7 @@
     var hear = msgs.querySelector('.dee-hear');
     if (hear) hear.parentNode.removeChild(hear);
     var t = e && e.target;
-    var asking = t && t.closest && t.closest('[data-dee], [data-dee-photo], .dee-choices, .dee-chat form, .dee-close, .msg-say');
+    var asking = t && t.closest && t.closest('[data-dee], [data-dee-photo], [data-dee-book], .dee-choices, .dee-chat .dee-form, .dee-bookform, .dee-close, .msg-say, .dee-camera');
     if (!asking && !chat.hidden && turns.length === 1 && voiceOn) say(turns[0].content);
   }
   document.addEventListener('click', firstGesture, true);
@@ -414,22 +525,27 @@
   });
   msgs.addEventListener('click', function (e) {
     if (e.target.closest('.dee-hear')) return;
+    if (e.target.closest('.dee-book-btn')) return showBooking();
     var b = e.target.closest('.dee-choices button');
     if (!b) return;
-    if (b.getAttribute('data-topic') === 'photo') return choosePhoto();
+    if (b.getAttribute('data-topic') === 'photo') return takePhoto();
+    if (b.getAttribute('data-topic') === 'book') return startBooking(b.textContent);
     ask(b.textContent);
   });
-  photoBtn.addEventListener('click', choosePhoto);
+  photoBtn.addEventListener('click', takePhoto);
+  galleryBtn.addEventListener('click', choosePhoto);
+  camInput.addEventListener('change', function () { sendPhoto(camInput.files[0]); });
   fileInput.addEventListener('change', function () { sendPhoto(fileInput.files[0]); });
   form.addEventListener('submit', function (e) { e.preventDefault(); var v = input.value; input.value = ''; ask(v); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !chat.hidden) setOpen(false); });
 
   // Buttons on the page that talk to Dee: data-dee="question", data-dee-open, data-dee-photo.
   document.addEventListener('click', function (e) {
-    var el = e.target.closest && e.target.closest('[data-dee], [data-dee-open], [data-dee-photo]');
+    var el = e.target.closest && e.target.closest('[data-dee], [data-dee-open], [data-dee-photo], [data-dee-book]');
     if (!el || root.contains(el)) return;
     e.preventDefault();
-    if (el.hasAttribute('data-dee-photo')) return choosePhoto();
+    if (el.hasAttribute('data-dee-photo')) return takePhoto();
+    if (el.hasAttribute('data-dee-book')) return startBooking();
     if (el.hasAttribute('data-dee')) return window.Dee.ask(el.getAttribute('data-dee'));
     setOpen(true);
     input.focus();

@@ -293,9 +293,9 @@ p { margin: 0 0 1em; }
   color: var(--gold-deep); border-radius: 999px; cursor: pointer;
 }
 .dee-choices button:hover, .dee-choices button:focus-visible { background: var(--gold); color: var(--white); outline: none; }
-.dee-chat form { display: flex; gap: 8px; padding: 10px 12px; border-top: 1px solid var(--line); background: var(--white); }
-.dee-chat form input { flex: 1; min-width: 0; border: 1px solid var(--line); padding: 10px 12px; font: inherit; background: var(--paper); color: var(--ink); }
-.dee-chat form button { border: 0; border-radius: 999px; background: var(--gold-deep); color: var(--white); padding: 0 16px; font-size: .76rem; letter-spacing: .14em; text-transform: uppercase; cursor: pointer; }
+.dee-chat .dee-form { display: flex; gap: 8px; padding: 10px 12px; border-top: 1px solid var(--line); background: var(--white); }
+.dee-chat .dee-form input { flex: 1; min-width: 0; border: 1px solid var(--line); padding: 10px 12px; font: inherit; background: var(--paper); color: var(--ink); }
+.dee-chat .dee-form button { border: 0; border-radius: 999px; background: var(--gold-deep); color: var(--white); padding: 0 16px; font-size: .76rem; letter-spacing: .14em; text-transform: uppercase; cursor: pointer; }
 @keyframes dee-pop { from { opacity: 0; transform: translateY(8px) scale(.96); } }
 @keyframes dee-arrive { from { transform: translate(60vw, -60vh) rotate(-20deg) scale(.6); } }
 @keyframes dee-roam {
@@ -514,3 +514,25 @@ section[id] { scroll-margin-top: 140px; }
 @media (max-width: 860px) { .header__inner { height: 96px; } .nav { max-height: calc(100vh - 110px); } }
 .header { background: #fff; backdrop-filter: none; }
 .pair__img img { height: auto; border-radius: 10px; background: #f6f1ea; }
+
+/* Dee: camera, gallery and booking */
+.dee-gallery { border: 1px solid var(--line) !important; background: var(--white) !important; color: var(--ink) !important; padding: 0 10px !important; display: flex; align-items: center; }
+.dee-chat .dee-form .dee-photo, .dee-chat .dee-form .dee-gallery, .dee-chat .dee-form .dee-mic { border-radius: 999px; min-width: 40px; justify-content: center; }
+.dee-chat { position: relative; }
+.dee-camera { position: absolute; inset: 0; background: #111; display: flex; flex-direction: column; z-index: 2; border-radius: inherit; overflow: hidden; }
+.dee-camera video { flex: 1; width: 100%; object-fit: cover; min-height: 0; }
+.dee-camera__bar { display: flex; gap: 10px; padding: 12px; background: var(--white); }
+.dee-camera__bar button { flex: 1; font: inherit; font-size: .8rem; letter-spacing: .12em; text-transform: uppercase; padding: 12px; border-radius: 999px; cursor: pointer; border: 1px solid var(--line); background: var(--white); color: var(--ink); }
+.dee-camera__bar .dee-camera__snap { background: var(--gold-deep); border-color: var(--gold-deep); color: var(--white); }
+.dee-book-btn, .dee-bookform__go {
+  margin-top: 8px; font: inherit; font-size: .8rem; letter-spacing: .1em; text-transform: uppercase; padding: 9px 16px;
+  border-radius: 999px; border: 0; background: var(--gold-deep); color: var(--white); cursor: pointer;
+}
+.dee-bookform__go:disabled { opacity: .6; }
+.dee-msgs .dee-bookform { display: flex; flex-direction: column; gap: 8px; max-width: 100%; width: 100%; padding-right: 14px; }
+.dee-bookform strong { font-family: var(--serif); font-weight: 500; font-size: 1.15rem; }
+.dee-bookform label { display: flex; flex-direction: column; gap: 3px; font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.dee-bookform input, .dee-bookform select { font: inherit; font-size: .92rem; letter-spacing: 0; text-transform: none; color: var(--ink); padding: 9px 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--white); min-width: 0; }
+.dee-bookform__row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.dee-bookform__note { margin: 0; font-size: .82rem; color: #9a4a2e; }
+.dee-bookform__note:empty { display: none; }
