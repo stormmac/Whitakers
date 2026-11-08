@@ -266,10 +266,10 @@ p { margin: 0 0 1em; }
   box-shadow: 0 30px 60px rgba(0,0,0,.35); display: flex; flex-direction: column; text-align: left;
 }
 .suni__head { display: flex; align-items: center; gap: 14px; padding: 18px 20px; border-bottom: 1px solid var(--line); }
-.suni__avatar {
-  width: 46px; height: 46px; border-radius: 50%; background: var(--gold); color: var(--white);
-  display: flex; align-items: center; justify-content: center; font-family: var(--serif); font-size: 1.5rem; flex: none;
-}
+.suni__avatar { width: 96px; height: 97px; flex: none; margin: -52px 0 -8px -10px; }
+.suni__avatar img { width: 100%; height: 100%; animation: suni-bob 2.4s ease-in-out infinite; filter: drop-shadow(0 8px 10px rgba(0,0,0,.25)); }
+@keyframes suni-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+@media (prefers-reduced-motion: reduce) { .suni__avatar img { animation: none; } }
 .suni__name { font-family: var(--serif); font-size: 1.35rem; line-height: 1.1; }
 .suni__status { font-size: .74rem; letter-spacing: .06em; color: var(--muted); }
 .suni__status::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #5a9a6b; margin-right: 6px; vertical-align: 1px; }
@@ -288,5 +288,5 @@ p { margin: 0 0 1em; }
 .suni__input input { flex: 1; min-width: 0; border: 0; padding: 15px 20px; font: inherit; background: transparent; color: var(--ink); }
 .suni__input input:focus { outline: 2px solid var(--gold); outline-offset: -2px; }
 .suni__input button { border: 0; background: var(--ink); color: var(--paper); padding: 0 20px; font-size: 1.1rem; cursor: pointer; }
-.hero__art .suni { margin: 40px 0; }
-@media (max-width: 860px) { .hero__art { min-height: 0; padding-bottom: 56px; } .hero__art .suni { margin: 0; } }
+.hero__art .suni { margin: 72px 0 40px; }
+@media (max-width: 860px) { .hero__art { min-height: 0; padding-bottom: 56px; } .hero__art .suni { margin: 36px 0 0; } }
