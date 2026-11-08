@@ -254,6 +254,133 @@ def brooch_1910s():
         b += facets(ellipse(x, cy, r, r, 10), x, cy, DIAMOND, k)
     return frame(W, H, 'white', b, '40 120 620 260')
 
-for name, fn in (('before-cluster', cluster_1950s), ('before-deco', deco_1920s), ('before-illusion', illusion_1970s), ('before-brooch', brooch_1910s), ('marquise', marquise_ring), ('sapphire', sapphire_ring), ('oval', oval_ring), ('hidden-halo', hidden_halo)):
+
+EMERALD = ('#5fe0a8', '#0f8a5a', '#06502f', '#2fb67c', '#043a22')
+ONYX = ('#4a4d55', '#15161a', '#050506', '#2a2c32', '#000000')
+def octagon(cx, cy, w, h, c):
+    """Emerald-cut outline: a rectangle with cut corners."""
+    x0, x1, y0, y1 = cx - w / 2, cx + w / 2, cy - h / 2, cy + h / 2
+    return [(x0 + c, y0), (x1 - c, y0), (x1, y0 + c), (x1, y1 - c), (x1 - c, y1), (x0 + c, y1), (x0, y1 - c), (x0, y0 + c)]
+def trillion(cx, cy, w, h, sgn):
+    return [(cx - sgn * w / 2, cy - h / 2), (cx + sgn * w / 2, cy), (cx - sgn * w / 2, cy + h / 2)]
+
+# BEFORE 5. Wide diamond dress band: round centre diamond in a diamond-shaped plate with crossing ridges, six smaller diamonds
+def dress_band():
+    W, H, cx, cy = 900, 560, 450, 270; st = MET['yellow']
+    b = f'<ellipse cx="{cx}" cy="{cy+150}" rx="330" ry="22" fill="#8a6a3a" opacity=".22" filter="url(#shadow)"/>'
+    b += band(W, cy + 20, 400, 170, 120, 6, False, st)
+    # crossing ridges forming an X lattice across the face
+    for sgn in (-1, 1):
+        b += f'<line x1="{cx-200}" y1="{cy-60+sgn*0}" x2="{cx+200}" y2="{cy+100}" stroke="{st}" stroke-width="3" opacity=".7" transform="{"" if sgn>0 else f"scale(1 -1) translate(0 {-2*cy-40})"}"/>'
+    b += f'<polygon points="{pts([(cx,cy-70),(cx+90,cy+20),(cx,cy+110),(cx-90,cy+20)])}" fill="url(#metal)" stroke="{st}" stroke-width="2"/>'
+    for (dx, dy) in ((-150, -10), (150, -10), (-150, 60), (150, 60), (-230, 25), (230, 25)):
+        x, y = cx + dx, cy + dy
+        b += f'<circle cx="{x}" cy="{y}" r="22" fill="{st}" opacity=".45"/>' + facets(ellipse(x, y, 18, 18, 12), x, y, DIAMOND, dx + dy)
+    b += facets(ellipse(cx, cy + 20, 50, 50, 18), cx, cy + 20, DIAMOND, 21)
+    for q in (0, 90, 180, 270):
+        a = math.radians(q); b += claw(cx + 54 * math.cos(a), cy + 20 + 54 * math.sin(a), 7, 'metal', st)
+    return frame(W, H, 'yellow', b, '130 90 640 400')
+
+# AFTER 5. The centre diamond in a fine six-claw solitaire, the six smaller diamonds set into a slim white-gold band
+def solitaire_six():
+    W, H, cx, cy = 700, 520, 350, 240; st = MET['white']
+    b = f'<ellipse cx="{cx}" cy="{cy+150}" rx="270" ry="20" fill="#7c828a" opacity=".22" filter="url(#shadow)"/>'
+    b += band(W, cy + 80, 330, 22, 16, 8, False, st)
+    for sgn in (-1, 1):
+        for k in range(3):
+            x = cx + sgn * (90 + k * 34); y = cy + 76 + 10 * ((x - cx) / 330) ** 2
+            b += facets(ellipse(x, y, 10, 10, 10), x, y, DIAMOND, k * sgn)
+    b += facets(ellipse(cx, cy, 62, 62, 20), cx, cy, DIAMOND, 4)
+    for k in range(6):
+        q = math.radians(k * 60 + 30); b += claw(cx + 64 * math.cos(q), cy + 64 * math.sin(q), 6, 'metal', st)
+    return frame(W, H, 'white', b, '110 90 480 360')
+
+# BEFORE 6. Onyx and diamond cocktail ring: emerald-cut onyx, trillion onyx sides, bars of small diamonds, yellow gold
+def onyx_cocktail():
+    W, H, cx, cy = 900, 560, 450, 260; st = MET['yellow']
+    b = f'<ellipse cx="{cx}" cy="{cy+150}" rx="330" ry="22" fill="#8a6a3a" opacity=".22" filter="url(#shadow)"/>'
+    b += band(W, cy + 80, 400, 30, 22, 14, False, st)
+    b += facets(octagon(cx, cy, 120, 150, 16), cx, cy, ONYX, 2)
+    for x, y in ((cx - 62, cy - 77), (cx + 62, cy - 77), (cx - 62, cy + 77), (cx + 62, cy + 77)):
+        b += claw(x, y, 7, 'metal', st)
+    for sgn in (-1, 1):
+        bx = cx + sgn * 86
+        b += f'<rect x="{bx-14}" y="{cy-62}" width="28" height="124" rx="6" fill="url(#metal)" stroke="{st}"/>'
+        for k in range(4):
+            y = cy - 45 + k * 30; b += facets(ellipse(bx, y, 10, 10, 10), bx, y, DIAMOND, k + sgn)
+        tx = cx + sgn * 150
+        b += facets(trillion(tx, cy, 80, 110, sgn), tx, cy, ONYX, 5 + sgn)
+        b += claw(tx - sgn * 40, cy - 55, 6, 'metal', st) + claw(tx - sgn * 40, cy + 55, 6, 'metal', st) + claw(tx + sgn * 40, cy, 6, 'metal', st)
+    return frame(W, H, 'yellow', b, '130 80 640 400')
+
+# AFTER 6. The onyx set east-west in a sleek bezel, the eight small diamonds flush-set along a slim band
+def onyx_eastwest():
+    W, H, cx, cy = 700, 520, 350, 240; st = MET['yellow']
+    b = f'<ellipse cx="{cx}" cy="{cy+150}" rx="270" ry="20" fill="#8a6a3a" opacity=".22" filter="url(#shadow)"/>'
+    b += band(W, cy + 70, 330, 24, 18, 8, False, st)
+    for sgn in (-1, 1):
+        for k in range(4):
+            x = cx + sgn * (110 + k * 30); y = cy + 68 + 8 * ((x - cx) / 330) ** 2
+            b += f'<circle cx="{x:.1f}" cy="{y:.1f}" r="8" fill="{st}" opacity=".5"/>' + facets(ellipse(x, y, 6, 6, 10), x, y, DIAMOND, k)
+    o = octagon(cx, cy + 10, 170, 104, 14)
+    b += f'<polygon points="{pts(octagon(cx, cy + 10, 186, 120, 18))}" fill="url(#metal)" stroke="{st}" stroke-width="2"/>'
+    b += facets(o, cx, cy + 10, ONYX, 3)
+    return frame(W, H, 'yellow', b, '110 90 480 360')
+
+# BEFORE 7. Filigree emerald ring: small oval emerald between open scrollwork shoulders, yellow gold
+def filigree_emerald():
+    W, H, cx, cy = 900, 560, 450, 260; st = MET['yellow']
+    b = f'<ellipse cx="{cx}" cy="{cy+150}" rx="330" ry="22" fill="#8a6a3a" opacity=".22" filter="url(#shadow)"/>'
+    b += band(W, cy + 30, 400, 110, 34, 10, False, st)
+    for sgn in (-1, 1):
+        for k in range(4):
+            x = cx + sgn * (70 + k * 42)
+            for dy in (-14, 22):
+                b += f'<path d="M{x-14} {cy+30+dy} c 0 -18 26 -18 26 -2 c 0 10 -12 12 -14 4" fill="none" stroke="#6b4f20" stroke-width="3" stroke-linecap="round" opacity=".75" transform="{"" if sgn>0 else f"scale(-1 1) translate({-2*x} 0)"}"/>'
+    o = ellipse(cx, cy + 30, 36, 52, 18, math.pi / 18)
+    b += facets(o, cx, cy + 30, EMERALD, 8)
+    for q in (40, 140, 220, 320):
+        a = math.radians(q); b += claw(cx + 38 * math.cos(a), cy + 30 + 54 * math.sin(a), 5, 'metal', st)
+    return frame(W, H, 'yellow', b, '130 80 640 400')
+
+# AFTER 7. The emerald set east-west on a fine stacking band
+def emerald_stacker():
+    W, H, cx, cy = 700, 520, 350, 240; st = MET['yellow']
+    b = f'<ellipse cx="{cx}" cy="{cy+150}" rx="270" ry="20" fill="#8a6a3a" opacity=".22" filter="url(#shadow)"/>'
+    b += band(W, cy + 30, 330, 16, 12, 8, False, st)
+    o = ellipse(cx, cy + 28, 64, 44, 20)
+    b += facets(o, cx, cy + 28, EMERALD, 6)
+    for q in (25, 155, 205, 335):
+        a = math.radians(q); b += claw(cx + 66 * math.cos(a), cy + 28 + 46 * math.sin(a), 6, 'metal', st)
+    return frame(W, H, 'yellow', b, '110 90 480 360')
+
+# BEFORE 8. Emerald cluster ring: oval emerald ringed by twelve diamonds on a chunky yellow-gold band
+def emerald_cluster():
+    W, H, cx, cy = 700, 520, 350, 240; st = MET['yellow']
+    b = f'<ellipse cx="{cx}" cy="{cy+150}" rx="270" ry="20" fill="#8a6a3a" opacity=".22" filter="url(#shadow)"/>'
+    b += band(W, cy + 40, 330, 150, 60, 6, False, st)
+    for k in range(12):
+        a = math.radians(k * 30); x, y = cx + 74 * math.cos(a), cy + 92 * math.sin(a)
+        b += facets(ellipse(x, y, 18, 18, 12), x, y, DIAMOND, k)
+        b += claw(x + 20 * math.cos(a + .5), y + 20 * math.sin(a + .5), 3.5, 'metal', st)
+    b += facets(ellipse(cx, cy, 50, 68, 20, math.pi / 20), cx, cy, EMERALD, 3)
+    return frame(W, H, 'yellow', b, '110 90 480 360')
+
+# AFTER 8. The emerald and its diamonds become a light halo pendant on a fine chain
+def emerald_pendant():
+    W, H, cx, cy = 700, 520, 350, 290; st = MET['yellow']
+    b = f'<path d="M110 60 Q {cx} {cy-40} 590 60" fill="none" stroke="url(#metalV)" stroke-width="3"/>'
+    b += f'<path d="M110 60 Q {cx} {cy-40} 590 60" fill="none" stroke="{st}" stroke-width="1" stroke-dasharray="3 3" opacity=".6"/>'
+    b += f'<ellipse cx="{cx}" cy="{cy-88}" rx="10" ry="16" fill="none" stroke="url(#metal)" stroke-width="5"/>'
+    for k in range(12):
+        a = math.radians(k * 30); x, y = cx + 52 * math.cos(a), cy + 68 * math.sin(a)
+        b += facets(ellipse(x, y, 11, 11, 10), x, y, DIAMOND, k)
+    b += f'<ellipse cx="{cx}" cy="{cy}" rx="40" ry="54" fill="none" stroke="url(#metal)" stroke-width="3"/>'
+    b += facets(ellipse(cx, cy, 36, 50, 20, math.pi / 20), cx, cy, EMERALD, 3)
+    for q in (45, 135, 225, 315):
+        a = math.radians(q); b += claw(cx + 37 * math.cos(a), cy + 51 * math.sin(a), 4, 'metal', st)
+    return frame(W, H, 'yellow', b, '110 70 480 360')
+
+for name, fn in (('before-band', dress_band), ('after-band', solitaire_six), ('before-onyx', onyx_cocktail), ('after-onyx', onyx_eastwest), ('before-filigree', filigree_emerald), ('after-filigree', emerald_stacker), ('before-emerald-cluster', emerald_cluster), ('after-emerald-pendant', emerald_pendant), ('before-cluster', cluster_1950s), ('before-deco', deco_1920s), ('before-illusion', illusion_1970s), ('before-brooch', brooch_1910s), ('marquise', marquise_ring), ('sapphire', sapphire_ring), ('oval', oval_ring), ('hidden-halo', hidden_halo)):
     open(OUT + name + '.svg', 'w').write(fn())
 print('ok')
