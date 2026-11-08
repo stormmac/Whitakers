@@ -506,3 +506,9 @@ button.btn { font-family: var(--sans); }
   .dee-companion.open .dee-fly { margin-bottom: -40px; }
   .dee-chat { height: min(420px, calc(100vh - 380px)); min-height: 260px; }
 }
+/* Header logo at twice the size */
+.header .logo__name { font-size: min(3.8rem, 10vw); }
+.header .logo__sub { font-size: min(1.24rem, 3.1vw); margin-top: 10px; }
+.header__inner { height: 130px; }
+section[id] { scroll-margin-top: 140px; }
+@media (max-width: 860px) { .header__inner { height: 96px; } .nav { max-height: calc(100vh - 110px); } }
