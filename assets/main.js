@@ -8,7 +8,7 @@
       '<div class="wrap">' +
       '<div class="footer__grid">' +
       '<div><a class="logo" href="index.html"><span class="logo__name">WHITAKERS</span><span class="logo__sub">Jewellers since 1903</span></a>' +
-      '<p style="margin-top:18px">Four generations of custom jewellery design in Newcastle and the Hunter.</p>' +
+      '<p style="margin-top:18px">We turn old jewellery into pieces you\'ll wear. Newcastle, since 1903.</p>' +
       '<div class="social"><a href="https://www.facebook.com/WhitakersJewellers">Facebook</a><a href="https://www.instagram.com/whitakersjewellers/">Instagram</a><a href="https://au.pinterest.com/whitakersAU/">Pinterest</a></div></div>' +
       '<div><h4>Create</h4><ul>' +
       '<li><a href="custom-design.html">Custom Design</a></li>' +
@@ -17,7 +17,7 @@
       '<li><a href="index.html#heirloom">Heirloom Redesign</a></li>' +
       '<li><a href="https://whitakers.com.au/collections/shop-all">Shop Ready to Wear</a></li></ul></div>' +
       '<div><h4>Customer Service</h4><ul>' +
-      '<li><a href="contact.html#book">Make an Appointment</a></li>' +
+      '<li><a href="contact.html#book">Start Your Redesign</a></li>' +
       '<li><a href="contact.html">Contact</a></li>' +
       '<li><a href="https://whitakers.com.au/pages/company-policies">Company Policies</a></li>' +
       '<li><a href="https://whitakers.com.au/pages/diamond-faq">FAQ</a></li>' +
@@ -64,48 +64,57 @@
   if (form) {
     form.addEventListener('submit', function (e) {
       e.preventDefault();
-      form.innerHTML = '<div class="full"><h3>Thank you</h3><p>We\'ll be in touch within one business day to arrange your consultation. (Demo only: this form isn\'t connected yet.)</p></div>';
+      form.innerHTML = '<div class="full"><h3>Thank you</h3><p>We\'ll be in touch within one business day with some first ideas. (Demo only: this form isn\'t connected yet.)</p></div>';
     });
   }
 })();
 
 
 
-// Dee: the Whitakers dragonfly, flying over every page (same pattern as Suni in my247tutor). Tap Dee to chat; Dee talks back.
-// Live replies come from /api/dee (Claude). Where that isn't reachable (a plain preview), Dee uses pre-written replies.
+// Dee: the Whitakers dragonfly, flying over every page (same pattern as Suni in my247tutor).
+// Dee opens the chat and says hello as soon as the page loads, speaks on the visitor's first tap,
+// and can look at photos of their jewellery. Live replies come from /api/dee (Claude); where that
+// isn't reachable (a plain preview), Dee uses pre-written replies.
 (function () {
   var hello = "Hi, I'm Dee! What can I help you with today?";
-  var specialise = "Whitakers specialises in heirloom redesign. We take the stones from old and inherited jewellery and set them into modern pieces you'll wear every day. We also design custom engagement rings and wedding bands.";
+  var specialise = "We turn old and inherited jewellery into modern pieces you'll actually wear. Tell me what you've got, or send me a photo, and I'll show you what it could become.";
   var topics = [
-    ['remodel', 'Redesign an heirloom'],
+    ['photo', 'Send Dee a photo'],
+    ['remodel', 'Redesign old jewellery'],
     ['engagement', "I'm planning an engagement"],
     ['wedding', 'I need wedding bands'],
-    ['repairs', 'Repairs or valuations'],
-    ['other', 'Something else']
+    ['repairs', 'Repairs or valuations']
   ];
   var scripted = {
-    engagement: 'Congratulations! We can design your ring from scratch or start from one of over 1,200 styles, natural or lab grown. Most couples begin with a relaxed consultation in the showroom.',
-    wedding: "We make wedding bands to sit perfectly against your engagement ring, plus men's bands in every style. Come in for a fitting and we'll show you the options.",
-    remodel: "That's our speciality. Bring in the rings, brooches or old gold, and we'll lift out the stones and design a modern piece around them. You'll see a 3D render before anything is taken apart. You can also send photos through the booking page first.",
-    repairs: 'We handle repairs, resizing, valuations and insurance replacements in store. Call us on 02 4927 0100 or drop into the showroom.',
-    other: "Earrings, pendants, tennis bracelets or a one-off idea? Tell me about it and the team will design it with you.",
-    hours: "We're open Tuesday to Friday 10am to 5pm and Saturday 9am to 3pm, at 212 Pacific Highway, Charlestown. We're closed Sundays, Mondays and public holidays.",
-    free: "Thanks! The team will be happy to help with that. Leave your details on the booking page and we'll be in touch within one business day, or call 02 4927 0100."
+    engagement: "Congratulations! We can design your ring from scratch around a natural or lab grown diamond. Tell me the style you love, or send me a photo of a ring you like, and the team will send you a design.",
+    wedding: "We make wedding bands to sit perfectly against your engagement ring, plus men's bands in every style. Send me a photo of your engagement ring and we'll suggest a few that fit.",
+    remodel: "That's what we love doing. We lift the stones out of your old pieces, recycle the gold, and design something modern around them. You'll see a 3D render before anything is taken apart. Send me a photo to get started.",
+    gold: "Old gold can usually be refined and recast into your new piece, or credited towards it. Pop a photo of it here, along with any stones you'd like to use.",
+    stones: "Loose stones are perfect for a new design. A ring, a pendant or a pair of studs are all popular. Send me a photo and tell me what you'd love to wear.",
+    fresh: "Lovely! We design engagement rings, wedding bands, earrings and pendants from scratch. Tell me what you have in mind, or send a photo of something you love.",
+    repairs: 'We handle repairs, resizing, valuations and insurance replacements. Call us on 02 4927 0100 or pop into the Charlestown showroom.',
+    hours: "We're open Tuesday to Friday 10am to 5pm and Saturday 9am to 3pm, at 212 Pacific Highway, Charlestown. You don't need to come in to get started though. A photo is enough.",
+    photo: "Thanks for the photo! The team will have a proper look and send you some ideas for what it could become. Leave your details on the start page so we know where to send them.",
+    free: "Thanks! The team will be happy to help with that. Leave your details on the start page and we'll be in touch within one business day, or call 02 4927 0100."
   };
   function pick(text) {
     var l = text.toLowerCase();
-    if (/engag|propos|diamond/.test(l)) return 'engagement';
+    if (/brand new|something new|from scratch/.test(l)) return 'fresh';
+    if (/engag|propos/.test(l)) return 'engagement';
     if (/wedding|band/.test(l)) return 'wedding';
-    if (/remodel|redesign|grand|mum|mother|nan|old gold|inherit|heirloom|family/.test(l)) return 'remodel';
+    if (/chain|old gold|scrap/.test(l)) return 'gold';
+    if (/loose|stones/.test(l)) return 'stones';
+    if (/remodel|redesign|grand|mum|mother|nan|inherit|heirloom|family|old|don't wear|could you make|become/.test(l)) return 'remodel';
     if (/repair|resiz|valu|insur|fix|broke/.test(l)) return 'repairs';
     if (/hour|open|when|where|address|park|locat/.test(l)) return 'hours';
-    if (/earring|pendant|necklace|bracelet|something else/.test(l)) return 'other';
     return 'free';
   }
 
   // ---------- Voice (same approach as my247tutor: Azure's Australian voice if set up, else the device's) ----------
   var store = { get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
                 set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
+  var session = { get: function (k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } },
+                  set: function (k, v) { try { sessionStorage.setItem(k, v); } catch (e) {} } };
   var canSpeak = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
   var voiceOn = store.get('whitakers.dee-voice') !== 'off';
   var cloud = false;
@@ -142,8 +151,10 @@
     clearTimeout(talkTimer);
     talkTimer = setTimeout(function () { root.classList.remove('talking'); }, Math.min(12000, 600 + text.length * 55));
   }
+  var spoken = false; // browsers only allow sound after the visitor's first tap or key press
   function say(text, force) {
     if (!voiceOn && !force) return mouthFor(text);
+    if (!spoken && !force) return mouthFor(text);
     stopTalking();
     text = text.replace(/\s+/g, ' ').trim();
     if (!text) return;
@@ -177,6 +188,7 @@
   var Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
   // ---------- Markup ----------
+  var CAMERA = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>';
   var root = document.createElement('div');
   root.className = 'dee-companion';
   root.innerHTML =
@@ -187,6 +199,8 @@
       '<div class="dee-msgs" aria-live="polite"></div>' +
       '<p class="dee-mic-status" hidden></p>' +
       '<form><input type="text" id="dee-text" placeholder="Ask Dee..." aria-label="Message to Dee" autocomplete="off" maxlength="1000">' +
+        '<button type="button" class="dee-photo" aria-label="Send Dee a photo" title="Send a photo">' + CAMERA + '</button>' +
+        '<input type="file" class="dee-file" accept="image/*" hidden>' +
         (Recognition ? '<button type="button" class="dee-mic" aria-label="Hold to talk to Dee" title="Hold to talk">' +
           '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>' : '') +
         '<button type="submit" class="dee-send">Send</button></form>' +
@@ -208,6 +222,8 @@
   var sendBtn = root.querySelector('.dee-send');
   var voiceBtn = root.querySelector('.dee-voice');
   var micBtn = root.querySelector('.dee-mic');
+  var photoBtn = root.querySelector('.dee-photo');
+  var fileInput = root.querySelector('.dee-file');
   var micStatus = root.querySelector('.dee-mic-status');
   var started = false, busy = false, live = true;
   var turns = [];
@@ -220,21 +236,31 @@
   }
   showVoice();
 
-  var BOOK_LINK = '<a class="dee-book" href="contact.html#book">Book a consultation &rarr;</a>';
-  function add(who, text, withBook) {
+  var START_LINK = '<a class="dee-book" href="contact.html#book">Start your redesign &rarr;</a>';
+  function add(who, text, opts) {
+    opts = opts || {};
     var d = document.createElement('div');
     d.className = 'msg msg--' + who;
+    if (opts.image) { var im = document.createElement('img'); im.src = opts.image; im.alt = 'Your photo'; d.appendChild(im); }
     var span = document.createElement('span');
     span.textContent = text;
     d.appendChild(span);
-    if (who === 'dee' && withBook) d.insertAdjacentHTML('beforeend', '<br>' + BOOK_LINK);
-    if (who === 'dee' && text !== '…') {
+    if (who === 'dee' && opts.link) d.insertAdjacentHTML('beforeend', '<br>' + START_LINK);
+    if (who === 'dee') {
       var again = document.createElement('button');
       again.type = 'button'; again.className = 'msg-say'; again.setAttribute('aria-label', 'Say it again');
       again.innerHTML = '&#128266;';
-      again.addEventListener('click', function () { say(text, true); });
+      again.addEventListener('click', function () { spoken = true; say(text, true); });
       d.appendChild(again);
     }
+    msgs.appendChild(d);
+    msgs.scrollTop = msgs.scrollHeight;
+    return d;
+  }
+  function typing() {
+    var d = document.createElement('div');
+    d.className = 'msg msg--dee';
+    d.innerHTML = '<span class="dee-typing" aria-label="Dee is typing"><i></i><i></i><i></i></span>';
     msgs.appendChild(d);
     msgs.scrollTop = msgs.scrollHeight;
     return d;
@@ -244,7 +270,7 @@
     c.className = 'dee-choices';
     topics.forEach(function (t) {
       var b = document.createElement('button');
-      b.type = 'button'; b.textContent = t[1];
+      b.type = 'button'; b.textContent = t[1]; b.setAttribute('data-topic', t[0]);
       c.appendChild(b);
     });
     msgs.appendChild(c);
@@ -252,59 +278,130 @@
   function setBusy(on) { busy = on; sendBtn.disabled = on; fly.classList.toggle('thinking', on); }
 
   function reply(text) {
-    var book = /book|consult|showroom|come in|appointment/i.test(text);
-    msgs.removeChild(msgs.lastChild);
-    add('dee', text, book);
+    var link = /photo|start page|details|book|showroom/i.test(text);
+    if (msgs.lastChild) msgs.removeChild(msgs.lastChild);
+    add('dee', text, { link: link });
     turns.push({ role: 'assistant', content: text });
     say(text);
     setBusy(false);
   }
-  function ask(text) {
-    text = text.trim();
-    if (!text || busy) return;
+  // Only the two most recent photos travel with each request, to keep it small.
+  function forSending() {
+    var seen = 0;
+    return turns.slice(-30).reverse().map(function (t) {
+      if (typeof t.content === 'string') return t;
+      seen++;
+      if (seen <= 2) return t;
+      return { role: t.role, content: '[I shared a photo earlier] ' + t.content[1].text };
+    }).reverse();
+  }
+  function ask(text, image) {
+    text = (text || '').trim();
+    if ((!text && !image) || busy) return;
     stopTalking();
-    add('you', text);
-    turns.push({ role: 'user', content: text });
+    if (image) {
+      text = text || "Here's a photo of my jewellery. What could you make from it?";
+      add('you', text, { image: image });
+      turns.push({ role: 'user', content: [
+        { type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: image.split(',')[1] } },
+        { type: 'text', text: text }
+      ] });
+    } else {
+      add('you', text);
+      turns.push({ role: 'user', content: text });
+    }
     setBusy(true);
-    add('dee', '…');
-    if (!live) return setTimeout(function () { reply(scripted[pick(text)]); }, 500);
+    typing();
+    var fallback = function () { live = false; reply(scripted[image ? 'photo' : pick(text)]); };
+    if (!live) return setTimeout(fallback, 700);
     fetch('api/dee', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ turns: turns.slice(-30) })
+      body: JSON.stringify({ turns: forSending() })
     }).then(function (r) {
       return r.json().catch(function () { return null; }).then(function (b) { return { ok: r.ok, status: r.status, body: b }; });
     }).then(function (res) {
       if (res.ok && res.body && res.body.reply) return reply(res.body.reply);
       // No live Dee here (a static preview, or no key set yet): use the pre-written replies from now on.
-      if (!res.body || res.status === 404 || res.status === 405 || res.status === 503 && !/busy|moment/i.test(res.body.error || '')) {
-        live = false;
-        return reply(scripted[pick(text)]);
-      }
+      if (!res.body || res.status === 404 || res.status === 405 || res.status === 503 && !/busy|moment/i.test(res.body.error || '')) return fallback();
       // Busy or a hiccup: say so, and leave the question out of the conversation so it can be asked again.
       turns.pop();
       msgs.removeChild(msgs.lastChild);
       add('dee', res.body.error || "Sorry, I couldn't answer just then. Could you try again?");
       setBusy(false);
-    }).catch(function () { live = false; reply(scripted[pick(text)]); });
+    }).catch(fallback);
   }
 
-  function setOpen(open) {
+  // Shrink a photo to a sensible size before it's sent.
+  function sendPhoto(file) {
+    if (!file || !/^image\//.test(file.type)) return;
+    var reader = new FileReader();
+    reader.onload = function () {
+      var img = new Image();
+      img.onload = function () {
+        var scale = Math.min(1, 1024 / Math.max(img.width, img.height));
+        var c = document.createElement('canvas');
+        c.width = Math.round(img.width * scale); c.height = Math.round(img.height * scale);
+        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+        var caption = input.value; input.value = '';
+        ask(caption, c.toDataURL('image/jpeg', 0.82));
+      };
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  }
+  function choosePhoto() { setOpen(true, true); fileInput.value = ''; fileInput.click(); }
+
+  function greet() {
+    started = true;
+    var t = typing();
+    setTimeout(function () {
+      if (t.parentNode) msgs.removeChild(t);
+      add('dee', hello);
+      say(hello + ' ' + specialise);
+      var t2 = typing();
+      setTimeout(function () {
+        if (t2.parentNode) msgs.removeChild(t2);
+        add('dee', specialise); choices();
+        if (!spoken && voiceOn && (canSpeak || cloud)) {
+          var hear = document.createElement('button');
+          hear.type = 'button'; hear.className = 'dee-hear'; hear.innerHTML = '&#128266; Tap to hear Dee';
+          msgs.appendChild(hear);
+        }
+      }, 900);
+    }, 700);
+    turns.push({ role: 'assistant', content: hello + ' ' + specialise });
+  }
+  function setOpen(open, quiet) {
     chat.hidden = !open;
     root.classList.toggle('open', open);
     fly.setAttribute('aria-expanded', open ? 'true' : 'false');
     fly.setAttribute('aria-label', open ? 'Close chat with Dee' : 'Chat with Dee');
     if (open) {
       bubble.hidden = true;
-      if (!started) {
-        started = true;
-        add('dee', hello); add('dee', specialise); choices();
-        turns.push({ role: 'assistant', content: hello + ' ' + specialise });
-      }
-      say(turns.filter(function (x) { return x.role === 'assistant'; }).pop().content);
-      input.focus();
-    } else stopTalking();
+      if (!started) greet();
+      else if (!quiet) say(turns.filter(function (x) { return x.role === 'assistant'; }).pop().content);
+    } else {
+      stopTalking();
+      session.set('whitakers.dee-closed', '1');
+    }
   }
+  window.Dee = { open: function () { setOpen(true); }, ask: function (t) { setOpen(true, true); ask(t); }, photo: choosePhoto };
+
+  // The visitor's first tap or key press lets the browser play sound, so Dee reads the greeting aloud then.
+  function firstGesture(e) {
+    if (spoken) return;
+    spoken = true;
+    document.removeEventListener('click', firstGesture, true);
+    document.removeEventListener('keydown', firstGesture, true);
+    var hear = msgs.querySelector('.dee-hear');
+    if (hear) hear.parentNode.removeChild(hear);
+    var t = e && e.target;
+    var asking = t && t.closest && t.closest('[data-dee], [data-dee-photo], .dee-choices, .dee-chat form, .dee-close, .msg-say');
+    if (!asking && !chat.hidden && turns.length === 1 && voiceOn) say(turns[0].content);
+  }
+  document.addEventListener('click', firstGesture, true);
+  document.addEventListener('keydown', firstGesture, true);
 
   fly.addEventListener('click', function () { setOpen(chat.hidden); });
   bubble.addEventListener('click', function () { setOpen(true); });
@@ -316,11 +413,27 @@
     showVoice();
   });
   msgs.addEventListener('click', function (e) {
+    if (e.target.closest('.dee-hear')) return;
     var b = e.target.closest('.dee-choices button');
-    if (b) ask(b.textContent);
+    if (!b) return;
+    if (b.getAttribute('data-topic') === 'photo') return choosePhoto();
+    ask(b.textContent);
   });
+  photoBtn.addEventListener('click', choosePhoto);
+  fileInput.addEventListener('change', function () { sendPhoto(fileInput.files[0]); });
   form.addEventListener('submit', function (e) { e.preventDefault(); var v = input.value; input.value = ''; ask(v); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !chat.hidden) setOpen(false); });
+
+  // Buttons on the page that talk to Dee: data-dee="question", data-dee-open, data-dee-photo.
+  document.addEventListener('click', function (e) {
+    var el = e.target.closest && e.target.closest('[data-dee], [data-dee-open], [data-dee-photo]');
+    if (!el || root.contains(el)) return;
+    e.preventDefault();
+    if (el.hasAttribute('data-dee-photo')) return choosePhoto();
+    if (el.hasAttribute('data-dee')) return window.Dee.ask(el.getAttribute('data-dee'));
+    setOpen(true);
+    input.focus();
+  });
 
   // Hold the microphone to talk: the words fill the box as they're said, and letting go sends them.
   if (micBtn) {
@@ -362,7 +475,10 @@
     micBtn.addEventListener('contextmenu', function (e) { e.preventDefault(); });
   }
 
-  // Dee says hello in a bubble a moment after the page opens.
-  setTimeout(function () { if (chat.hidden) { bubble.textContent = hello + ' Tap me to chat.'; bubble.hidden = false; } }, 1500);
-  setTimeout(function () { bubble.hidden = true; }, 10000);
+  // Dee opens the chat and says hello as soon as it has flown in, unless the visitor closed it earlier this visit.
+  setTimeout(function () {
+    if (!chat.hidden) return;
+    if (session.get('whitakers.dee-closed')) { bubble.textContent = hello + ' Tap me to chat.'; bubble.hidden = false; return; }
+    setOpen(true, true);
+  }, 1200);
 })();

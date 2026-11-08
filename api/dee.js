@@ -1,4 +1,5 @@
-// POST /api/dee  { turns: [{ role: "user" | "assistant", content: string }] }  ->  { reply: string }
+// POST /api/dee  { turns: [{ role: "user" | "assistant", content: string | [image, text] }] }  ->  { reply: string }
+// Visitors can include a photo of their jewellery (base64 JPEG/PNG/WebP), which Dee can see.
 // Dee's live replies, from Claude. Needs ANTHROPIC_API_KEY set in the hosting environment.
 import Anthropic from "@anthropic-ai/sdk";
 import { DEE_SYSTEM_PROMPT } from "../lib/deePrompt.js";
@@ -16,12 +17,36 @@ const REFUSAL_REPLY = "I can't help with that one, but I'd love to help with any
 let client = null;
 const getClient = () => (client ??= new Anthropic());
 
+const MAX_IMAGES = 2;
+const MAX_IMAGE_CHARS = 2_000_000; // base64 characters, about 1.5 MB
+const IMAGE_TYPES = new Set(["image/jpeg", "image/png", "image/webp", "image/gif"]);
+
+// A turn's content is text, or (from the visitor) a photo of their jewellery plus text.
+function cleanContent(t, imagesLeft) {
+  if (typeof t.content === "string") return t.content.trim().slice(0, MAX_CHARS);
+  if (t.role !== "user" || !Array.isArray(t.content)) return "";
+  const text = t.content.filter((b) => b?.type === "text" && typeof b.text === "string").map((b) => b.text).join(" ").trim().slice(0, MAX_CHARS);
+  const img = t.content.find((b) => b?.type === "image" && b.source?.type === "base64");
+  const ok = img && IMAGE_TYPES.has(img.source.media_type) && typeof img.source.data === "string" && img.source.data.length <= MAX_IMAGE_CHARS;
+  if (!ok || imagesLeft.n <= 0) return img ? `[I shared a photo] ${text}`.trim() : text;
+  imagesLeft.n--;
+  return [
+    { type: "image", source: { type: "base64", media_type: img.source.media_type, data: img.source.data } },
+    { type: "text", text: text || "Here's a photo of my jewellery." },
+  ];
+}
+
 function cleanTurns(raw) {
   if (!Array.isArray(raw)) return null;
+  const imagesLeft = { n: MAX_IMAGES };
+  // Walk newest first so the most recent photos are the ones kept.
   const turns = raw
     .slice(-MAX_TURNS)
-    .filter((t) => t && (t.role === "user" || t.role === "assistant") && typeof t.content === "string" && t.content.trim())
-    .map((t) => ({ role: t.role, content: t.content.trim().slice(0, MAX_CHARS) }));
+    .filter((t) => t && (t.role === "user" || t.role === "assistant"))
+    .reverse()
+    .map((t) => ({ role: t.role, content: cleanContent(t, imagesLeft) }))
+    .filter((t) => t.content.length)
+    .reverse();
   // The conversation must start with the visitor and end with their latest message.
   while (turns.length && turns[0].role !== "user") turns.shift();
   if (!turns.length || turns.at(-1).role !== "user") return null;
