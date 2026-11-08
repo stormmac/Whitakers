@@ -425,3 +425,16 @@ main { padding-bottom: 40px; }
 @media (max-width: 560px) { .bring { grid-template-columns: 1fr; } }
 .nav > a { white-space: nowrap; }
 .hero__art--reset svg.reset-art { width: 100%; max-width: 600px; }
+
+/* Design ideas gallery */
+.ideas { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 44px; }
+.idea { margin: 0; background: var(--white); border: 1px solid var(--line); display: flex; flex-direction: column; min-width: 0; }
+.idea img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block; background: var(--paper-2); }
+.idea--wide { grid-column: span 2; grid-row: span 2; }
+.idea--wide img { aspect-ratio: auto; flex: 1; min-height: 0; }
+.idea figcaption { padding: 14px 16px 18px; font-size: .92rem; color: var(--muted); }
+.idea figcaption strong { display: block; color: var(--ink); font-family: var(--serif); font-size: 1.2rem; font-weight: 500; margin-bottom: 2px; }
+.ideas__note { font-size: .78rem; color: var(--muted); margin-top: 14px; letter-spacing: .04em; }
+@media (max-width: 1020px) { .ideas { grid-template-columns: repeat(2, 1fr); } .idea--wide { grid-row: auto; } .idea--wide img { aspect-ratio: 16 / 9; } }
+@media (max-width: 560px) { .ideas { grid-template-columns: 1fr; } .idea--wide { grid-column: auto; } }
+section[id] { scroll-margin-top: 90px; }
