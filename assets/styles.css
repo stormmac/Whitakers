@@ -498,3 +498,11 @@ button.btn { font-family: var(--sans); }
   .dee-companion.open .dee-fly { width: 168px; margin-bottom: -30px; }
   .dee-chat { height: min(420px, calc(100vh - 300px)); }
 }
+/* Dee stays the same size when the chat opens */
+.dee-companion.open .dee-fly { width: 380px; }
+@media (max-width: 1000px) { .dee-fly, .dee-companion.open .dee-fly { width: 300px; } }
+@media (max-width: 700px) {
+  .dee-fly, .dee-companion.open .dee-fly { width: 240px; }
+  .dee-companion.open .dee-fly { margin-bottom: -40px; }
+  .dee-chat { height: min(420px, calc(100vh - 380px)); min-height: 260px; }
+}
