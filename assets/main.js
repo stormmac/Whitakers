@@ -64,11 +64,10 @@
 
 
 
-// Suni: the robot bee from my247tutor, flying over every page. Tap Suni to chat; Suni talks back.
-// Live replies come from /api/suni (Claude). Where that isn't reachable (a plain preview), Suni uses pre-written replies.
+// Dee: the Whitakers dragonfly, flying over every page (same pattern as Suni in my247tutor). Tap Dee to chat; Dee talks back.
+// Live replies come from /api/dee (Claude). Where that isn't reachable (a plain preview), Dee uses pre-written replies.
 (function () {
-  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var hello = "Hi, I'm Suni! What can I help you with today?";
+  var hello = "Hi, I'm Dee! What can I help you with today?";
   var specialise = 'Whitakers specialises in custom engagement rings, wedding bands made to match, and remodelling family jewellery into something new. Every piece is designed with you in our Charlestown showroom.';
   var topics = [
     ['engagement', "I'm planning an engagement"],
@@ -101,7 +100,7 @@
   var store = { get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
                 set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
   var canSpeak = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
-  var voiceOn = store.get('whitakers.suni-voice') !== 'off';
+  var voiceOn = store.get('whitakers.dee-voice') !== 'off';
   var cloud = false;
   var audio = null;
   fetch('api/speech').then(function (r) { return r.ok ? r.json() : null; })
@@ -130,8 +129,14 @@
     if (canSpeak) window.speechSynthesis.cancel();
     root.classList.remove('talking');
   }
+  var talkTimer = null;
+  function mouthFor(text) {
+    root.classList.add('talking');
+    clearTimeout(talkTimer);
+    talkTimer = setTimeout(function () { root.classList.remove('talking'); }, Math.min(12000, 600 + text.length * 55));
+  }
   function say(text, force) {
-    if (!voiceOn && !force) return;
+    if (!voiceOn && !force) return mouthFor(text);
     stopTalking();
     text = text.replace(/\s+/g, ' ').trim();
     if (!text) return;
@@ -156,6 +161,8 @@
     u.lang = v ? v.lang : 'en-AU';
     u.rate = 0.95; u.pitch = 1.15;
     u.onend = done; u.onerror = done;
+    clearTimeout(talkTimer);
+    talkTimer = setTimeout(done, 1500 + text.length * 80);
     window.speechSynthesis.speak(u);
   }
 
@@ -164,54 +171,57 @@
 
   // ---------- Markup ----------
   var root = document.createElement('div');
-  root.className = 'suni-companion';
+  root.className = 'dee-companion';
   root.innerHTML =
-    '<div class="suni-chat" role="dialog" aria-label="Chat with Suni" hidden>' +
-      '<div class="suni-chat__head"><div><strong>Suni</strong><small>Whitakers Jewellers</small></div><div>' +
-        (canSpeak ? '<button type="button" class="suni-voice" title="Voice"></button>' : '') +
-        '<button type="button" class="suni-close" aria-label="Close chat with Suni">&times;</button></div></div>' +
-      '<div class="suni-msgs" aria-live="polite"></div>' +
-      '<p class="suni-mic-status" hidden></p>' +
-      '<form><input type="text" id="suni-text" placeholder="Ask Suni..." aria-label="Message to Suni" autocomplete="off" maxlength="1000">' +
-        (Recognition ? '<button type="button" class="suni-mic" aria-label="Hold to talk to Suni" title="Hold to talk">' +
+    '<div class="dee-chat" role="dialog" aria-label="Chat with Dee" hidden>' +
+      '<div class="dee-chat__head"><div><strong>Dee</strong><small>Whitakers Jewellers</small></div><div>' +
+        (canSpeak ? '<button type="button" class="dee-voice" title="Voice"></button>' : '') +
+        '<button type="button" class="dee-close" aria-label="Close chat with Dee">&times;</button></div></div>' +
+      '<div class="dee-msgs" aria-live="polite"></div>' +
+      '<p class="dee-mic-status" hidden></p>' +
+      '<form><input type="text" id="dee-text" placeholder="Ask Dee..." aria-label="Message to Dee" autocomplete="off" maxlength="1000">' +
+        (Recognition ? '<button type="button" class="dee-mic" aria-label="Hold to talk to Dee" title="Hold to talk">' +
           '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>' : '') +
-        '<button type="submit" class="suni-send">Send</button></form>' +
+        '<button type="submit" class="dee-send">Send</button></form>' +
     '</div>' +
-    '<button type="button" class="suni-bubble" hidden></button>' +
-    '<button type="button" class="suni-fly" aria-expanded="false" aria-label="Chat with Suni" title="Tap to chat">' +
-      '<img src="assets/suni/' + (reduce ? 'still' : 'hover') + '.webp" alt="Suni, a friendly robot bumble bee" draggable="false"></button>';
+    '<button type="button" class="dee-bubble" hidden></button>' +
+    '<button type="button" class="dee-fly" aria-expanded="false" aria-label="Chat with Dee" title="Tap to chat">' +
+      '<span class="dee" role="img" aria-label="Dee, a cheerful dragonfly">' +
+        '<img class="dee-body" src="assets/dee/dee-base.webp" alt="" draggable="false">' +
+        '<img class="dee-arm" src="assets/dee/dee-arm.webp" alt="" draggable="false">' +
+        '<img class="dee-jaw" src="assets/dee/dee-jaw.webp" alt="" draggable="false"></span></button>';
   document.body.appendChild(root);
 
-  var chat = root.querySelector('.suni-chat');
-  var msgs = root.querySelector('.suni-msgs');
-  var bubble = root.querySelector('.suni-bubble');
-  var fly = root.querySelector('.suni-fly');
+  var chat = root.querySelector('.dee-chat');
+  var msgs = root.querySelector('.dee-msgs');
+  var bubble = root.querySelector('.dee-bubble');
+  var fly = root.querySelector('.dee-fly');
   var form = root.querySelector('form');
-  var input = root.querySelector('#suni-text');
-  var sendBtn = root.querySelector('.suni-send');
-  var voiceBtn = root.querySelector('.suni-voice');
-  var micBtn = root.querySelector('.suni-mic');
-  var micStatus = root.querySelector('.suni-mic-status');
+  var input = root.querySelector('#dee-text');
+  var sendBtn = root.querySelector('.dee-send');
+  var voiceBtn = root.querySelector('.dee-voice');
+  var micBtn = root.querySelector('.dee-mic');
+  var micStatus = root.querySelector('.dee-mic-status');
   var started = false, busy = false, live = true;
   var turns = [];
 
   function showVoice() {
     if (!voiceBtn) return;
     voiceBtn.setAttribute('aria-pressed', voiceOn ? 'true' : 'false');
-    voiceBtn.setAttribute('aria-label', voiceOn ? "Turn Suni's voice off" : "Turn Suni's voice on");
+    voiceBtn.setAttribute('aria-label', voiceOn ? "Turn Dee's voice off" : "Turn Dee's voice on");
     voiceBtn.innerHTML = voiceOn ? '&#128266;' : '&#128264;';
   }
   showVoice();
 
-  var BOOK_LINK = '<a class="suni-book" href="contact.html#book">Book a consultation &rarr;</a>';
+  var BOOK_LINK = '<a class="dee-book" href="contact.html#book">Book a consultation &rarr;</a>';
   function add(who, text, withBook) {
     var d = document.createElement('div');
     d.className = 'msg msg--' + who;
     var span = document.createElement('span');
     span.textContent = text;
     d.appendChild(span);
-    if (who === 'suni' && withBook) d.insertAdjacentHTML('beforeend', '<br>' + BOOK_LINK);
-    if (who === 'suni' && text !== '…') {
+    if (who === 'dee' && withBook) d.insertAdjacentHTML('beforeend', '<br>' + BOOK_LINK);
+    if (who === 'dee' && text !== '…') {
       var again = document.createElement('button');
       again.type = 'button'; again.className = 'msg-say'; again.setAttribute('aria-label', 'Say it again');
       again.innerHTML = '&#128266;';
@@ -224,7 +234,7 @@
   }
   function choices() {
     var c = document.createElement('div');
-    c.className = 'suni-choices';
+    c.className = 'dee-choices';
     topics.forEach(function (t) {
       var b = document.createElement('button');
       b.type = 'button'; b.textContent = t[1];
@@ -237,7 +247,7 @@
   function reply(text) {
     var book = /book|consult|showroom|come in|appointment/i.test(text);
     msgs.removeChild(msgs.lastChild);
-    add('suni', text, book);
+    add('dee', text, book);
     turns.push({ role: 'assistant', content: text });
     say(text);
     setBusy(false);
@@ -249,9 +259,9 @@
     add('you', text);
     turns.push({ role: 'user', content: text });
     setBusy(true);
-    add('suni', '…');
+    add('dee', '…');
     if (!live) return setTimeout(function () { reply(scripted[pick(text)]); }, 500);
-    fetch('api/suni', {
+    fetch('api/dee', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ turns: turns.slice(-30) })
@@ -259,7 +269,7 @@
       return r.json().catch(function () { return null; }).then(function (b) { return { ok: r.ok, status: r.status, body: b }; });
     }).then(function (res) {
       if (res.ok && res.body && res.body.reply) return reply(res.body.reply);
-      // No live Suni here (a static preview, or no key set yet): use the pre-written replies from now on.
+      // No live Dee here (a static preview, or no key set yet): use the pre-written replies from now on.
       if (!res.body || res.status === 404 || res.status === 405 || res.status === 503 && !/busy|moment/i.test(res.body.error || '')) {
         live = false;
         return reply(scripted[pick(text)]);
@@ -267,7 +277,7 @@
       // Busy or a hiccup: say so, and leave the question out of the conversation so it can be asked again.
       turns.pop();
       msgs.removeChild(msgs.lastChild);
-      add('suni', res.body.error || "Sorry, I couldn't answer just then. Could you try again?");
+      add('dee', res.body.error || "Sorry, I couldn't answer just then. Could you try again?");
       setBusy(false);
     }).catch(function () { live = false; reply(scripted[pick(text)]); });
   }
@@ -276,12 +286,12 @@
     chat.hidden = !open;
     root.classList.toggle('open', open);
     fly.setAttribute('aria-expanded', open ? 'true' : 'false');
-    fly.setAttribute('aria-label', open ? 'Close chat with Suni' : 'Chat with Suni');
+    fly.setAttribute('aria-label', open ? 'Close chat with Dee' : 'Chat with Dee');
     if (open) {
       bubble.hidden = true;
       if (!started) {
         started = true;
-        add('suni', hello); add('suni', specialise); choices();
+        add('dee', hello); add('dee', specialise); choices();
         turns.push({ role: 'assistant', content: hello + ' ' + specialise });
       }
       say(turns.filter(function (x) { return x.role === 'assistant'; }).pop().content);
@@ -291,15 +301,15 @@
 
   fly.addEventListener('click', function () { setOpen(chat.hidden); });
   bubble.addEventListener('click', function () { setOpen(true); });
-  root.querySelector('.suni-close').addEventListener('click', function () { setOpen(false); });
+  root.querySelector('.dee-close').addEventListener('click', function () { setOpen(false); });
   if (voiceBtn) voiceBtn.addEventListener('click', function () {
     voiceOn = !voiceOn;
-    store.set('whitakers.suni-voice', voiceOn ? 'on' : 'off');
+    store.set('whitakers.dee-voice', voiceOn ? 'on' : 'off');
     if (!voiceOn) stopTalking();
     showVoice();
   });
   msgs.addEventListener('click', function (e) {
-    var b = e.target.closest('.suni-choices button');
+    var b = e.target.closest('.dee-choices button');
     if (b) ask(b.textContent);
   });
   form.addEventListener('submit', function (e) { e.preventDefault(); var v = input.value; input.value = ''; ask(v); });
@@ -324,8 +334,8 @@
       };
       rec.onerror = function (ev) {
         status(ev.error === 'not-allowed' || ev.error === 'service-not-allowed'
-          ? 'Suni needs permission to use the microphone. Allow it in your browser, or type instead.'
-          : "Suni didn't catch that. Try again, or type instead.");
+          ? 'Dee needs permission to use the microphone. Allow it in your browser, or type instead.'
+          : "Dee didn't catch that. Try again, or type instead.");
       };
       rec.onend = function () {
         listening = false;
@@ -345,7 +355,7 @@
     micBtn.addEventListener('contextmenu', function (e) { e.preventDefault(); });
   }
 
-  // Suni says hello in a bubble a moment after the page opens.
+  // Dee says hello in a bubble a moment after the page opens.
   setTimeout(function () { if (chat.hidden) { bubble.textContent = hello + ' Tap me to chat.'; bubble.hidden = false; } }, 1500);
   setTimeout(function () { bubble.hidden = true; }, 10000);
 })();

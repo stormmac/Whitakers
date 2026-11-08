@@ -260,49 +260,52 @@ p { margin: 0 0 1em; }
 }
 
 
-/* Suni: floats over every page, tap to chat (same pattern as my247tutor) */
-.suni-companion {
+/* Dee the dragonfly: floats over every page, tap to chat (same pattern as Suni in my247tutor) */
+.dee-companion {
   position: fixed; z-index: 60; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; pointer-events: none;
   right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px));
 }
-.suni-companion > * { pointer-events: auto; }
-.suni-fly { position: relative; border: 0; background: none; padding: 0; cursor: pointer; width: 130px; height: 131px; filter: drop-shadow(0 10px 14px rgba(0,0,0,.25)); }
-.suni-fly img { width: 100%; height: 100%; display: block; user-select: none; }
-.suni-companion.open .suni-fly { width: 92px; height: 93px; }
-.suni-fly:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; border-radius: 50%; }
-.suni-bubble {
+.dee-companion > * { pointer-events: auto; }
+.dee-fly { position: relative; border: 0; background: none; padding: 0; cursor: pointer; width: 124px; filter: drop-shadow(0 10px 14px rgba(0,0,0,.25)); }
+.dee { position: relative; display: block; width: 100%; aspect-ratio: 512 / 757; }
+.dee img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; user-select: none; -webkit-user-drag: none; }
+.dee-arm { transform-origin: 68.4% 37.9%; }
+.dee-jaw { transform-origin: 50% 0; }
+.dee-companion.open .dee-fly { width: 84px; }
+.dee-fly:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; border-radius: 50%; }
+.dee-bubble {
   max-width: 250px; font: inherit; font-size: .95rem; text-align: left; color: var(--ink); background: var(--white);
   border: 1.5px solid var(--gold); border-radius: 18px 18px 4px 18px; padding: 12px 16px; margin-right: 44px;
-  box-shadow: 0 10px 28px rgba(0,0,0,.14); cursor: pointer; animation: suni-pop .35s cubic-bezier(.3,1.5,.5,1) both;
+  box-shadow: 0 10px 28px rgba(0,0,0,.14); cursor: pointer; animation: dee-pop .35s cubic-bezier(.3,1.5,.5,1) both;
 }
-.suni-chat {
+.dee-chat {
   width: min(370px, calc(100vw - 32px)); height: min(500px, calc(100vh - 190px)); display: flex; flex-direction: column;
   background: var(--paper); border: 1.5px solid var(--gold); border-radius: 20px 20px 6px 20px;
-  box-shadow: 0 20px 48px rgba(0,0,0,.22); overflow: hidden; animation: suni-pop .3s ease-out both;
+  box-shadow: 0 20px 48px rgba(0,0,0,.22); overflow: hidden; animation: dee-pop .3s ease-out both;
 }
-.suni-chat[hidden], .suni-bubble[hidden] { display: none; }
-.suni-chat__head { display: flex; align-items: center; justify-content: space-between; padding: 12px 12px 12px 18px; background: var(--ink); color: var(--paper); }
-.suni-chat__head strong { font-family: var(--serif); font-weight: 500; font-size: 1.3rem; }
-.suni-chat__head small { display: block; font-size: .72rem; letter-spacing: .06em; color: #b9b4aa; }
-.suni-chat__head button { border: 0; background: none; color: inherit; cursor: pointer; font-size: 1.5rem; line-height: 1; padding: 4px 8px; }
-.suni-chat__head button[aria-pressed="false"] { opacity: .5; }
-.suni-msgs { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
-.suni-msgs .msg { padding: 10px 14px; font-size: .94rem; line-height: 1.5; max-width: 88%; }
-.suni-msgs .msg--suni { background: var(--paper-2); align-self: flex-start; border-radius: 4px 14px 14px 14px; }
-.suni-msgs .msg--you { background: var(--ink); color: var(--paper); align-self: flex-end; border-radius: 14px 4px 14px 14px; }
-.suni-msgs .msg a { color: var(--gold-deep); font-weight: 500; }
-.suni-choices { display: flex; flex-wrap: wrap; gap: 6px; }
-.suni-choices button {
+.dee-chat[hidden], .dee-bubble[hidden] { display: none; }
+.dee-chat__head { display: flex; align-items: center; justify-content: space-between; padding: 12px 12px 12px 18px; background: var(--ink); color: var(--paper); }
+.dee-chat__head strong { font-family: var(--serif); font-weight: 500; font-size: 1.3rem; }
+.dee-chat__head small { display: block; font-size: .72rem; letter-spacing: .06em; color: #b9b4aa; }
+.dee-chat__head button { border: 0; background: none; color: inherit; cursor: pointer; font-size: 1.5rem; line-height: 1; padding: 4px 8px; }
+.dee-chat__head button[aria-pressed="false"] { opacity: .5; }
+.dee-msgs { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+.dee-msgs .msg { padding: 10px 14px; font-size: .94rem; line-height: 1.5; max-width: 88%; }
+.dee-msgs .msg--dee { background: var(--paper-2); align-self: flex-start; border-radius: 4px 14px 14px 14px; }
+.dee-msgs .msg--you { background: var(--ink); color: var(--paper); align-self: flex-end; border-radius: 14px 4px 14px 14px; }
+.dee-msgs .msg a { color: var(--gold-deep); font-weight: 500; }
+.dee-choices { display: flex; flex-wrap: wrap; gap: 6px; }
+.dee-choices button {
   font: inherit; font-size: .82rem; padding: 7px 12px; border: 1px solid var(--gold); background: var(--white);
   color: var(--gold-deep); border-radius: 999px; cursor: pointer;
 }
-.suni-choices button:hover, .suni-choices button:focus-visible { background: var(--gold); color: var(--white); outline: none; }
-.suni-chat form { display: flex; gap: 8px; padding: 10px 12px; border-top: 1px solid var(--line); background: var(--white); }
-.suni-chat form input { flex: 1; min-width: 0; border: 1px solid var(--line); padding: 10px 12px; font: inherit; background: var(--paper); color: var(--ink); }
-.suni-chat form button { border: 0; background: var(--ink); color: var(--paper); padding: 0 16px; font-size: .76rem; letter-spacing: .14em; text-transform: uppercase; cursor: pointer; }
-@keyframes suni-pop { from { opacity: 0; transform: translateY(8px) scale(.96); } }
-@keyframes suni-arrive { from { transform: translate(60vw, -60vh) rotate(-20deg) scale(.6); } }
-@keyframes suni-roam {
+.dee-choices button:hover, .dee-choices button:focus-visible { background: var(--gold); color: var(--white); outline: none; }
+.dee-chat form { display: flex; gap: 8px; padding: 10px 12px; border-top: 1px solid var(--line); background: var(--white); }
+.dee-chat form input { flex: 1; min-width: 0; border: 1px solid var(--line); padding: 10px 12px; font: inherit; background: var(--paper); color: var(--ink); }
+.dee-chat form button { border: 0; background: var(--ink); color: var(--paper); padding: 0 16px; font-size: .76rem; letter-spacing: .14em; text-transform: uppercase; cursor: pointer; }
+@keyframes dee-pop { from { opacity: 0; transform: translateY(8px) scale(.96); } }
+@keyframes dee-arrive { from { transform: translate(60vw, -60vh) rotate(-20deg) scale(.6); } }
+@keyframes dee-roam {
   0%, 100% { transform: translate(0, 0) rotate(0); }
   20% { transform: translate(-40px, -30px) rotate(-6deg); }
   40% { transform: translate(-10px, -60px) rotate(4deg); }
@@ -310,25 +313,50 @@ p { margin: 0 0 1em; }
   80% { transform: translate(-20px, -10px) rotate(3deg); }
 }
 @media (prefers-reduced-motion: no-preference) {
-  .suni-fly { animation: suni-arrive 1.4s cubic-bezier(.2,.8,.2,1) both, suni-roam 14s ease-in-out 1.4s infinite; }
-  .suni-companion.open .suni-fly { animation: none; }
+  .dee-fly { animation: dee-arrive 1.4s cubic-bezier(.2,.8,.2,1) both, dee-roam 14s ease-in-out 1.4s infinite; }
+  .dee-companion.open .dee-fly { animation: none; }
 }
-@media (prefers-reduced-motion: reduce) { .suni-bubble, .suni-chat { animation: none; } }
-@media (max-width: 560px) { .suni-fly { width: 96px; height: 97px; } .suni-companion.open .suni-fly { width: 72px; height: 73px; } }
+@media (prefers-reduced-motion: reduce) { .dee-bubble, .dee-chat { animation: none; } }
+@media (max-width: 560px) { .dee-fly { width: 92px; } .dee-companion.open .dee-fly { width: 64px; } }
 main { padding-bottom: 40px; }
-/* Suni: talking, thinking, microphone */
-.suni-msgs .msg { position: relative; }
-.suni-msgs .msg--suni { padding-right: 34px; }
+/* Dee: talking, thinking, microphone */
+.dee-msgs .msg { position: relative; }
+.dee-msgs .msg--dee { padding-right: 34px; }
 .msg-say { position: absolute; right: 6px; bottom: 6px; border: 0; background: none; cursor: pointer; font-size: .85rem; opacity: .55; padding: 2px; }
 .msg-say:hover, .msg-say:focus-visible { opacity: 1; }
-.suni-book { display: inline-block; margin-top: 6px; font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; }
-.suni-mic { border: 1px solid var(--line) !important; background: var(--paper) !important; color: var(--ink) !important; padding: 0 12px !important; display: flex; align-items: center; touch-action: none; user-select: none; -webkit-user-select: none; }
-.suni-mic.listening { background: #b3412f !important; border-color: #b3412f !important; color: var(--white) !important; }
-.suni-mic-status { margin: 0; padding: 8px 14px; font-size: .8rem; color: var(--muted); background: var(--paper-2); }
-.suni-send:disabled { opacity: .5; cursor: default; }
+.dee-book { display: inline-block; margin-top: 6px; font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; }
+.dee-mic { border: 1px solid var(--line) !important; background: var(--paper) !important; color: var(--ink) !important; padding: 0 12px !important; display: flex; align-items: center; touch-action: none; user-select: none; -webkit-user-select: none; }
+.dee-mic.listening { background: #b3412f !important; border-color: #b3412f !important; color: var(--white) !important; }
+.dee-mic-status { margin: 0; padding: 8px 14px; font-size: .8rem; color: var(--muted); background: var(--paper-2); }
+.dee-send:disabled { opacity: .5; cursor: default; }
+/* Dee's mouth opens and closes while talking, the raised arm waves now and then and gestures while Dee talks. */
 @media (prefers-reduced-motion: no-preference) {
-  .suni-companion.talking .suni-fly img { animation: suni-talk .35s ease-in-out infinite alternate; }
-  .suni-fly.thinking img { animation: suni-think 1s ease-in-out infinite; }
+  .dee-arm { animation: dee-wave 7s ease-in-out 2s infinite; }
+  .dee-companion.talking .dee-jaw { animation: dee-jaw .9s linear infinite; }
+  .dee-companion.talking .dee-arm { animation: dee-gesture 1.6s ease-in-out infinite; }
+  .dee-fly.thinking .dee { animation: dee-think 1s ease-in-out infinite; }
 }
-@keyframes suni-talk { to { transform: translateY(-3px) scale(1.03); } }
-@keyframes suni-think { 50% { transform: rotate(-6deg); } }
+.dee-companion.talking .dee-jaw { animation: dee-jaw .9s linear infinite; }
+@keyframes dee-jaw {
+  0%, 100% { transform: translateY(0); }
+  12% { transform: translateY(1.3%); }
+  24% { transform: translateY(.3%); }
+  38% { transform: translateY(1.1%); }
+  50% { transform: translateY(0); }
+  64% { transform: translateY(1.4%); }
+  78% { transform: translateY(.5%); }
+  88% { transform: translateY(1%); }
+}
+@keyframes dee-wave {
+  0%, 70%, 100% { transform: rotate(0); }
+  76% { transform: rotate(-14deg); }
+  82% { transform: rotate(3deg); }
+  88% { transform: rotate(-12deg); }
+  94% { transform: rotate(2deg); }
+}
+@keyframes dee-gesture {
+  0%, 100% { transform: rotate(0); }
+  30% { transform: rotate(-10deg); }
+  60% { transform: rotate(4deg); }
+}
+@keyframes dee-think { 50% { transform: rotate(-5deg); } }

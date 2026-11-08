@@ -20,13 +20,13 @@ Static HTML/CSS prototype. Open `index.html` in a browser; no build step.
 ## Notes
 The live site is a Shopify store. "Shop" links point to the existing Shopify collections, so this design can become a Shopify theme homepage rather than replacing the store.
 
-## Suni (live chat and voice)
+## Dee the dragonfly (live chat and voice)
 
-Suni is the robot bee from my247tutor. She floats over every page (`assets/main.js`), talks back out loud, and listens when you hold the microphone button.
+Dee is the Whitakers dragonfly mascot, set up the same way as Suni in my247tutor. Dee floats over every page (`assets/main.js`), talks back out loud with a moving mouth and arm, and listens when you hold the microphone button. The artwork is split into layers in `assets/dee/` (body, jaw, raised arm) so the mouth and arm can move; `dee-original.png` is the source image.
 
-- `api/suni.js` sends the conversation to Claude (`claude-opus-5-5`) with the Whitakers prompt in `lib/suniPrompt.js`.
-- `api/speech.js` gives Suni the same Australian Azure voice as my247tutor (`en-AU-NatashaNeural`). Without Azure keys she uses the visitor's device voice.
-- Opened as plain files or in the Claude preview, there's no server, so Suni falls back to pre-written replies.
+- `api/dee.js` sends the conversation to Claude (`claude-opus-5-5`) with the Whitakers prompt in `lib/deePrompt.js`.
+- `api/speech.js` gives Dee the same Australian Azure voice as my247tutor (`en-AU-NatashaNeural`). Without Azure keys Dee uses the visitor's device voice.
+- Opened as plain files or in the Claude preview, there's no server, so Dee falls back to pre-written replies.
 
 ### Deploy on Vercel
 1. Import this repo in Vercel (no build settings needed; it's a static site plus the `api/` functions).
