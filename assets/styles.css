@@ -513,3 +513,4 @@ button.btn { font-family: var(--sans); }
 section[id] { scroll-margin-top: 140px; }
 @media (max-width: 860px) { .header__inner { height: 96px; } .nav { max-height: calc(100vh - 110px); } }
 .header { background: #fff; backdrop-filter: none; }
+.pair__img img { height: auto; border-radius: 10px; background: #f6f1ea; }

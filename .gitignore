@@ -3,3 +3,5 @@ node_modules
 .env*
 .DS_Store
 preview/
+scripts/render3d/three
+scripts/render3d/out/

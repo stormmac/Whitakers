@@ -6,7 +6,14 @@ root = pathlib.Path(__file__).resolve().parent.parent
 out = root / "preview"; out.mkdir(exist_ok=True)
 css = (root / "assets/styles.css").read_text()
 js = (root / "assets/main.js").read_text().replace("</script", "<\\/script")
+import base64
+def inline_images(html):
+    def data(m):
+        f = root / m.group(1)
+        return 'src="data:image/webp;base64,' + base64.b64encode(f.read_bytes()).decode() + '"'
+    return re.sub(r'src="(assets/designs/[^"]+\.webp)"', data, html)
 def inline(html):
+    html = inline_images(html)
     html = html.replace('<link rel="stylesheet" href="assets/styles.css">', "<style>\n" + css + "\n</style>")
     html = html.replace('<script src="assets/main.js"></script>', "<script>\n" + js + "\n</script>")
     assert "assets/styles.css" not in html and "assets/main.js" not in html
