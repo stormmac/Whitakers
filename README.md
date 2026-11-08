@@ -19,3 +19,18 @@ Static HTML/CSS prototype. Open `index.html` in a browser; no build step.
 
 ## Notes
 The live site is a Shopify store. "Shop" links point to the existing Shopify collections, so this design can become a Shopify theme homepage rather than replacing the store.
+
+## Suni (live chat and voice)
+
+Suni is the robot bee from my247tutor. She floats over every page (`assets/main.js`), talks back out loud, and listens when you hold the microphone button.
+
+- `api/suni.js` sends the conversation to Claude (`claude-opus-5-5`) with the Whitakers prompt in `lib/suniPrompt.js`.
+- `api/speech.js` gives Suni the same Australian Azure voice as my247tutor (`en-AU-NatashaNeural`). Without Azure keys she uses the visitor's device voice.
+- Opened as plain files or in the Claude preview, there's no server, so Suni falls back to pre-written replies.
+
+### Deploy on Vercel
+1. Import this repo in Vercel (no build settings needed; it's a static site plus the `api/` functions).
+2. Add environment variables:
+   - `ANTHROPIC_API_KEY` (required for live replies)
+   - `AZURE_SPEECH_KEY` and `AZURE_SPEECH_REGION` (optional, for the Australian cloud voice; you can reuse the my247tutor ones)
+3. Deploy.

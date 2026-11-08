@@ -316,3 +316,19 @@ p { margin: 0 0 1em; }
 @media (prefers-reduced-motion: reduce) { .suni-bubble, .suni-chat { animation: none; } }
 @media (max-width: 560px) { .suni-fly { width: 96px; height: 97px; } .suni-companion.open .suni-fly { width: 72px; height: 73px; } }
 main { padding-bottom: 40px; }
+/* Suni: talking, thinking, microphone */
+.suni-msgs .msg { position: relative; }
+.suni-msgs .msg--suni { padding-right: 34px; }
+.msg-say { position: absolute; right: 6px; bottom: 6px; border: 0; background: none; cursor: pointer; font-size: .85rem; opacity: .55; padding: 2px; }
+.msg-say:hover, .msg-say:focus-visible { opacity: 1; }
+.suni-book { display: inline-block; margin-top: 6px; font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; }
+.suni-mic { border: 1px solid var(--line) !important; background: var(--paper) !important; color: var(--ink) !important; padding: 0 12px !important; display: flex; align-items: center; touch-action: none; user-select: none; -webkit-user-select: none; }
+.suni-mic.listening { background: #b3412f !important; border-color: #b3412f !important; color: var(--white) !important; }
+.suni-mic-status { margin: 0; padding: 8px 14px; font-size: .8rem; color: var(--muted); background: var(--paper-2); }
+.suni-send:disabled { opacity: .5; cursor: default; }
+@media (prefers-reduced-motion: no-preference) {
+  .suni-companion.talking .suni-fly img { animation: suni-talk .35s ease-in-out infinite alternate; }
+  .suni-fly.thinking img { animation: suni-think 1s ease-in-out infinite; }
+}
+@keyframes suni-talk { to { transform: translateY(-3px) scale(1.03); } }
+@keyframes suni-think { 50% { transform: rotate(-6deg); } }
