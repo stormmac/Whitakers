@@ -258,3 +258,35 @@ p { margin: 0 0 1em; }
   .mega__grid { grid-template-columns: 1fr; }
   .logo__name { font-size: 1.5rem; }
 }
+
+/* Suni welcome assistant (homepage hero) */
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.suni {
+  width: 100%; max-width: 440px; background: var(--paper); color: var(--ink);
+  box-shadow: 0 30px 60px rgba(0,0,0,.35); display: flex; flex-direction: column; text-align: left;
+}
+.suni__head { display: flex; align-items: center; gap: 14px; padding: 18px 20px; border-bottom: 1px solid var(--line); }
+.suni__avatar {
+  width: 46px; height: 46px; border-radius: 50%; background: var(--gold); color: var(--white);
+  display: flex; align-items: center; justify-content: center; font-family: var(--serif); font-size: 1.5rem; flex: none;
+}
+.suni__name { font-family: var(--serif); font-size: 1.35rem; line-height: 1.1; }
+.suni__status { font-size: .74rem; letter-spacing: .06em; color: var(--muted); }
+.suni__status::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #5a9a6b; margin-right: 6px; vertical-align: 1px; }
+.suni__log { padding: 18px 20px 6px; display: flex; flex-direction: column; gap: 10px; max-height: 340px; overflow-y: auto; }
+.msg { padding: 11px 15px; font-size: .95rem; line-height: 1.5; max-width: 88%; }
+.msg--suni { background: var(--paper-2); align-self: flex-start; border-radius: 2px 14px 14px 14px; }
+.msg--you { background: var(--ink); color: var(--paper); align-self: flex-end; border-radius: 14px 2px 14px 14px; }
+.msg a { color: var(--gold-deep); font-weight: 500; }
+.suni__options { display: flex; flex-wrap: wrap; gap: 8px; padding: 10px 20px 16px; }
+.suni__options button {
+  font: inherit; font-size: .84rem; padding: 8px 14px; border: 1px solid var(--gold); background: transparent;
+  color: var(--gold-deep); border-radius: 999px; cursor: pointer;
+}
+.suni__options button:hover, .suni__options button:focus-visible { background: var(--gold); color: var(--white); outline: none; }
+.suni__input { display: flex; border-top: 1px solid var(--line); }
+.suni__input input { flex: 1; min-width: 0; border: 0; padding: 15px 20px; font: inherit; background: transparent; color: var(--ink); }
+.suni__input input:focus { outline: 2px solid var(--gold); outline-offset: -2px; }
+.suni__input button { border: 0; background: var(--ink); color: var(--paper); padding: 0 20px; font-size: 1.1rem; cursor: pointer; }
+.hero__art .suni { margin: 40px 0; }
+@media (max-width: 860px) { .hero__art { min-height: 0; padding-bottom: 56px; } .hero__art .suni { margin: 0; } }

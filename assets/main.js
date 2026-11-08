@@ -61,3 +61,47 @@
     });
   }
 })();
+
+// Suni welcome assistant (scripted replies; not connected to live chat yet)
+(function () {
+  var log = document.getElementById('suni-log');
+  if (!log) return;
+  var opts = document.getElementById('suni-options');
+  var form = document.getElementById('suni-form');
+  var input = document.getElementById('suni-text');
+  var replies = {
+    engagement: 'Congratulations! We can design your ring from scratch or start from one of over 1,200 styles, natural or lab grown. Most couples begin with a relaxed consultation. <a href="contact.html#book">Book a time with us</a> or <a href="custom-design.html#engagement">see how it works</a>.',
+    wedding: 'We make wedding bands to sit perfectly against your engagement ring, plus men\'s bands in every style. <a href="contact.html#book">Book a fitting</a> or <a href="custom-design.html#wedding">read more</a>.',
+    remodel: 'We love giving family pieces a second life. Bring in the ring, stones or old gold and we\'ll talk through what\'s possible. <a href="contact.html#book">Book a remodel consultation</a>.',
+    repairs: 'We handle repairs, resizing, valuations and insurance replacements in store. Call us on 02 4927 0100 or <a href="contact.html">find our showroom</a>.',
+    other: 'Earrings, pendants, tennis bracelets or a one-off idea? Tell us about it and we\'ll design it with you. <a href="contact.html#book">Share your idea</a>.',
+    free: 'Thanks for your message. The team will be happy to help with that. <a href="contact.html#book">Leave your details</a> and we\'ll be in touch within one business day, or call 02 4927 0100.'
+  };
+  function add(cls, html) {
+    var d = document.createElement('div');
+    d.className = 'msg ' + cls;
+    if (cls === 'msg--you') d.textContent = html; else d.innerHTML = html;
+    log.appendChild(d);
+    log.scrollTop = log.scrollHeight;
+  }
+  function answer(text, topic) {
+    add('msg--you', text);
+    setTimeout(function () { add('msg--suni', replies[topic]); }, 450);
+  }
+  opts.addEventListener('click', function (e) {
+    var b = e.target.closest('button');
+    if (b) answer(b.textContent, b.getAttribute('data-topic'));
+  });
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var v = input.value.trim();
+    if (!v) return;
+    input.value = '';
+    var l = v.toLowerCase(), topic = 'free';
+    if (/engag|propos|diamond/.test(l)) topic = 'engagement';
+    else if (/wedding|band/.test(l)) topic = 'wedding';
+    else if (/remodel|redesign|grand|mum|mother|old|inherit/.test(l)) topic = 'remodel';
+    else if (/repair|resiz|valu|insur|fix/.test(l)) topic = 'repairs';
+    answer(v, topic);
+  });
+})();
