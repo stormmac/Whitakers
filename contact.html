@@ -11,19 +11,17 @@
 </head>
 <body>
 
-<div class="topbar">Custom jewellery, designed in Newcastle since 1903 &middot; <a href="tel:0249270100">02 4927 0100</a></div>
+<div class="topbar">Heirloom redesign and custom jewellery, Newcastle, since 1903 &middot; <a href="tel:0249270100">02 4927 0100</a></div>
 
 <header class="header">
   <div class="wrap header__inner">
     <a class="logo" href="index.html"><span class="logo__name">WHITAKERS</span><span class="logo__sub">Jewellers since 1903</span></a>
     <button class="nav-toggle" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
     <nav class="nav" aria-label="Main">
+      <a href="index.html#heirloom">Heirloom Redesign</a>
+      <a href="index.html#before-after">Before &amp; After</a>
       <a href="custom-design.html">Custom Design</a>
-      <a href="custom-design.html#engagement">Engagement</a>
-      <a href="custom-design.html#wedding">Wedding</a>
-      <a href="custom-design.html#remodel">Remodel</a>
       <a href="index.html#story">Our Story</a>
-      <a href="https://whitakers.com.au/collections/shop-all">Shop</a>
       <a class="btn" href="#book">Book a Consultation</a>
     </nav>
   </div>
@@ -33,8 +31,8 @@
   <section class="page-hero">
     <div class="wrap">
       <span class="eyebrow">Contact</span>
-      <h1>Let's start your design</h1>
-      <p class="lede">Tell us a little about what you have in mind and we'll arrange a no-obligation consultation at our Charlestown showroom.</p>
+      <h1>Let's give your jewellery a new life</h1>
+      <p class="lede">Send us a few photos of the pieces you'd like to redesign, or tell us about a new idea. We'll get back to you and arrange a free, no-obligation consultation at our Charlestown showroom.</p>
     </div>
   </section>
 
@@ -44,9 +42,9 @@
         <div class="full">
           <label>What are you creating?</label>
           <div class="chips">
-            <label><input type="radio" name="type" value="engagement" checked><span>Engagement ring</span></label>
+            <label><input type="radio" name="type" value="remodel" checked><span>Redesign an heirloom</span></label>
+            <label><input type="radio" name="type" value="engagement"><span>Engagement ring</span></label>
             <label><input type="radio" name="type" value="wedding"><span>Wedding band</span></label>
-            <label><input type="radio" name="type" value="remodel"><span>Remodel an heirloom</span></label>
             <label><input type="radio" name="type" value="other"><span>Something else</span></label>
           </div>
         </div>
@@ -57,7 +55,9 @@
           <select id="budget"><option>Not sure yet</option><option>Under $3,000</option><option>$3,000 – $6,000</option><option>$6,000 – $10,000</option><option>$10,000 – $20,000</option><option>$20,000+</option></select></div>
         <div><label for="when">When do you need it?</label>
           <select id="when"><option>No rush</option><option>Within 3 months</option><option>Within 6 weeks</option><option>As soon as possible</option></select></div>
-        <div class="full"><label for="idea">Tell us about your idea</label><textarea id="idea" placeholder="Stone shape, metal, a photo you love, a family piece you'd like to reuse..."></textarea></div>
+        <div class="full"><label for="photos">Photos of your pieces (optional)</label>
+          <div class="file-drop">Add photos of the jewellery you'd like to redesign, or a design you love.<br><input id="photos" type="file" accept="image/*" multiple><div class="file-list" id="photo-list"></div></div></div>
+        <div class="full"><label for="idea">Tell us about the pieces and your idea</label><textarea id="idea" placeholder="Whose pieces they were, what you'd love to wear, metal colour, anything you've seen and liked..."></textarea></div>
         <div class="full"><button class="btn" type="submit">Request a Consultation</button></div>
       </form>
 

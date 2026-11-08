@@ -14,7 +14,7 @@
       '<li><a href="custom-design.html">Custom Design</a></li>' +
       '<li><a href="custom-design.html#engagement">Engagement Rings</a></li>' +
       '<li><a href="custom-design.html#wedding">Wedding Rings</a></li>' +
-      '<li><a href="custom-design.html#remodel">Remodel &amp; Restore</a></li>' +
+      '<li><a href="index.html#heirloom">Heirloom Redesign</a></li>' +
       '<li><a href="https://whitakers.com.au/collections/shop-all">Shop Ready to Wear</a></li></ul></div>' +
       '<div><h4>Customer Service</h4><ul>' +
       '<li><a href="contact.html#book">Make an Appointment</a></li>' +
@@ -52,6 +52,13 @@
     });
   });
 
+  // Show which photos were added to the enquiry form
+  var photos = document.getElementById('photos');
+  if (photos) photos.addEventListener('change', function () {
+    var list = document.getElementById('photo-list');
+    list.textContent = photos.files.length ? photos.files.length + ' photo' + (photos.files.length > 1 ? 's' : '') + ' added: ' + Array.prototype.map.call(photos.files, function (f) { return f.name; }).join(', ') : '';
+  });
+
   // Demo-only enquiry form handler
   var form = document.querySelector('[data-enquiry]');
   if (form) {
@@ -68,18 +75,18 @@
 // Live replies come from /api/dee (Claude). Where that isn't reachable (a plain preview), Dee uses pre-written replies.
 (function () {
   var hello = "Hi, I'm Dee! What can I help you with today?";
-  var specialise = 'Whitakers specialises in custom engagement rings, wedding bands made to match, and remodelling family jewellery into something new. Every piece is designed with you in our Charlestown showroom.';
+  var specialise = "Whitakers specialises in heirloom redesign. We take the stones from old and inherited jewellery and set them into modern pieces you'll wear every day. We also design custom engagement rings and wedding bands.";
   var topics = [
+    ['remodel', 'Redesign an heirloom'],
     ['engagement', "I'm planning an engagement"],
     ['wedding', 'I need wedding bands'],
-    ['remodel', 'Remodel a family piece'],
     ['repairs', 'Repairs or valuations'],
     ['other', 'Something else']
   ];
   var scripted = {
     engagement: 'Congratulations! We can design your ring from scratch or start from one of over 1,200 styles, natural or lab grown. Most couples begin with a relaxed consultation in the showroom.',
     wedding: "We make wedding bands to sit perfectly against your engagement ring, plus men's bands in every style. Come in for a fitting and we'll show you the options.",
-    remodel: "We love giving family pieces a second life. Bring in the ring, stones or old gold and we'll talk through what's possible.",
+    remodel: "That's our speciality. Bring in the rings, brooches or old gold, and we'll lift out the stones and design a modern piece around them. You'll see a 3D render before anything is taken apart. You can also send photos through the booking page first.",
     repairs: 'We handle repairs, resizing, valuations and insurance replacements in store. Call us on 02 4927 0100 or drop into the showroom.',
     other: "Earrings, pendants, tennis bracelets or a one-off idea? Tell me about it and the team will design it with you.",
     hours: "We're open Tuesday to Friday 10am to 5pm and Saturday 9am to 3pm, at 212 Pacific Highway, Charlestown. We're closed Sundays, Mondays and public holidays.",
