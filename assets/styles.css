@@ -259,34 +259,60 @@ p { margin: 0 0 1em; }
   .logo__name { font-size: 1.5rem; }
 }
 
-/* Suni welcome assistant (homepage hero) */
-.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-.suni {
-  width: 100%; max-width: 440px; background: var(--paper); color: var(--ink);
-  box-shadow: 0 30px 60px rgba(0,0,0,.35); display: flex; flex-direction: column; text-align: left;
+
+/* Suni: floats over every page, tap to chat (same pattern as my247tutor) */
+.suni-companion {
+  position: fixed; z-index: 60; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; pointer-events: none;
+  right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px));
 }
-.suni__head { display: flex; align-items: center; gap: 14px; padding: 18px 20px; border-bottom: 1px solid var(--line); }
-.suni__avatar { width: 96px; height: 97px; flex: none; margin: -52px 0 -8px -10px; }
-.suni__avatar img { width: 100%; height: 100%; animation: suni-bob 2.4s ease-in-out infinite; filter: drop-shadow(0 8px 10px rgba(0,0,0,.25)); }
-@keyframes suni-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
-@media (prefers-reduced-motion: reduce) { .suni__avatar img { animation: none; } }
-.suni__name { font-family: var(--serif); font-size: 1.35rem; line-height: 1.1; }
-.suni__status { font-size: .74rem; letter-spacing: .06em; color: var(--muted); }
-.suni__status::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #5a9a6b; margin-right: 6px; vertical-align: 1px; }
-.suni__log { padding: 18px 20px 6px; display: flex; flex-direction: column; gap: 10px; max-height: 340px; overflow-y: auto; }
-.msg { padding: 11px 15px; font-size: .95rem; line-height: 1.5; max-width: 88%; }
-.msg--suni { background: var(--paper-2); align-self: flex-start; border-radius: 2px 14px 14px 14px; }
-.msg--you { background: var(--ink); color: var(--paper); align-self: flex-end; border-radius: 14px 2px 14px 14px; }
-.msg a { color: var(--gold-deep); font-weight: 500; }
-.suni__options { display: flex; flex-wrap: wrap; gap: 8px; padding: 10px 20px 16px; }
-.suni__options button {
-  font: inherit; font-size: .84rem; padding: 8px 14px; border: 1px solid var(--gold); background: transparent;
+.suni-companion > * { pointer-events: auto; }
+.suni-fly { position: relative; border: 0; background: none; padding: 0; cursor: pointer; width: 130px; height: 131px; filter: drop-shadow(0 10px 14px rgba(0,0,0,.25)); }
+.suni-fly img { width: 100%; height: 100%; display: block; user-select: none; }
+.suni-companion.open .suni-fly { width: 92px; height: 93px; }
+.suni-fly:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; border-radius: 50%; }
+.suni-bubble {
+  max-width: 250px; font: inherit; font-size: .95rem; text-align: left; color: var(--ink); background: var(--white);
+  border: 1.5px solid var(--gold); border-radius: 18px 18px 4px 18px; padding: 12px 16px; margin-right: 44px;
+  box-shadow: 0 10px 28px rgba(0,0,0,.14); cursor: pointer; animation: suni-pop .35s cubic-bezier(.3,1.5,.5,1) both;
+}
+.suni-chat {
+  width: min(370px, calc(100vw - 32px)); height: min(500px, calc(100vh - 190px)); display: flex; flex-direction: column;
+  background: var(--paper); border: 1.5px solid var(--gold); border-radius: 20px 20px 6px 20px;
+  box-shadow: 0 20px 48px rgba(0,0,0,.22); overflow: hidden; animation: suni-pop .3s ease-out both;
+}
+.suni-chat[hidden], .suni-bubble[hidden] { display: none; }
+.suni-chat__head { display: flex; align-items: center; justify-content: space-between; padding: 12px 12px 12px 18px; background: var(--ink); color: var(--paper); }
+.suni-chat__head strong { font-family: var(--serif); font-weight: 500; font-size: 1.3rem; }
+.suni-chat__head small { display: block; font-size: .72rem; letter-spacing: .06em; color: #b9b4aa; }
+.suni-chat__head button { border: 0; background: none; color: inherit; cursor: pointer; font-size: 1.5rem; line-height: 1; padding: 4px 8px; }
+.suni-chat__head button[aria-pressed="false"] { opacity: .5; }
+.suni-msgs { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+.suni-msgs .msg { padding: 10px 14px; font-size: .94rem; line-height: 1.5; max-width: 88%; }
+.suni-msgs .msg--suni { background: var(--paper-2); align-self: flex-start; border-radius: 4px 14px 14px 14px; }
+.suni-msgs .msg--you { background: var(--ink); color: var(--paper); align-self: flex-end; border-radius: 14px 4px 14px 14px; }
+.suni-msgs .msg a { color: var(--gold-deep); font-weight: 500; }
+.suni-choices { display: flex; flex-wrap: wrap; gap: 6px; }
+.suni-choices button {
+  font: inherit; font-size: .82rem; padding: 7px 12px; border: 1px solid var(--gold); background: var(--white);
   color: var(--gold-deep); border-radius: 999px; cursor: pointer;
 }
-.suni__options button:hover, .suni__options button:focus-visible { background: var(--gold); color: var(--white); outline: none; }
-.suni__input { display: flex; border-top: 1px solid var(--line); }
-.suni__input input { flex: 1; min-width: 0; border: 0; padding: 15px 20px; font: inherit; background: transparent; color: var(--ink); }
-.suni__input input:focus { outline: 2px solid var(--gold); outline-offset: -2px; }
-.suni__input button { border: 0; background: var(--ink); color: var(--paper); padding: 0 20px; font-size: 1.1rem; cursor: pointer; }
-.hero__art .suni { margin: 72px 0 40px; }
-@media (max-width: 860px) { .hero__art { min-height: 0; padding-bottom: 56px; } .hero__art .suni { margin: 36px 0 0; } }
+.suni-choices button:hover, .suni-choices button:focus-visible { background: var(--gold); color: var(--white); outline: none; }
+.suni-chat form { display: flex; gap: 8px; padding: 10px 12px; border-top: 1px solid var(--line); background: var(--white); }
+.suni-chat form input { flex: 1; min-width: 0; border: 1px solid var(--line); padding: 10px 12px; font: inherit; background: var(--paper); color: var(--ink); }
+.suni-chat form button { border: 0; background: var(--ink); color: var(--paper); padding: 0 16px; font-size: .76rem; letter-spacing: .14em; text-transform: uppercase; cursor: pointer; }
+@keyframes suni-pop { from { opacity: 0; transform: translateY(8px) scale(.96); } }
+@keyframes suni-arrive { from { transform: translate(60vw, -60vh) rotate(-20deg) scale(.6); } }
+@keyframes suni-roam {
+  0%, 100% { transform: translate(0, 0) rotate(0); }
+  20% { transform: translate(-40px, -30px) rotate(-6deg); }
+  40% { transform: translate(-10px, -60px) rotate(4deg); }
+  60% { transform: translate(-70px, -20px) rotate(-4deg); }
+  80% { transform: translate(-20px, -10px) rotate(3deg); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .suni-fly { animation: suni-arrive 1.4s cubic-bezier(.2,.8,.2,1) both, suni-roam 14s ease-in-out 1.4s infinite; }
+  .suni-companion.open .suni-fly { animation: none; }
+}
+@media (prefers-reduced-motion: reduce) { .suni-bubble, .suni-chat { animation: none; } }
+@media (max-width: 560px) { .suni-fly { width: 96px; height: 97px; } .suni-companion.open .suni-fly { width: 72px; height: 73px; } }
+main { padding-bottom: 40px; }
