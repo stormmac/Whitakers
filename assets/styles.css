@@ -486,3 +486,15 @@ button.btn { font-family: var(--sans); }
 .how-art { max-width: 620px; margin: 28px auto 0; }
 .how-art svg.reset-art { width: 100%; max-width: 620px; }
 .home main { padding-bottom: 0; }
+
+/* Dee at twice the size, facing the other way (Nov 2026) */
+.dee { transform: scaleX(-1); }
+.dee-fly { width: 380px; }
+.dee-companion.open .dee-fly { width: 300px; }
+.dee-fly.thinking .dee { animation: none; }
+@media (prefers-reduced-motion: no-preference) { .dee-companion.open .dee-fly.thinking { animation: dee-think 1s ease-in-out infinite; } }
+@media (max-width: 700px) {
+  .dee-fly { width: 240px; }
+  .dee-companion.open .dee-fly { width: 168px; margin-bottom: -30px; }
+  .dee-chat { height: min(420px, calc(100vh - 300px)); }
+}
