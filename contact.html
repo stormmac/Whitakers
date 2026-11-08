@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contact &amp; Book a Consultation | Whitakers Jewellers</title>
+<meta name="description" content="Contact the team at Whitakers today. We can help you with custom-making a special piece, buying an engagement ring, or remodelling an old piece.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<div class="topbar">Custom jewellery, designed in Newcastle since 1903 &middot; <a href="tel:0249270100">02 4927 0100</a></div>
+
+<header class="header">
+  <div class="wrap header__inner">
+    <a class="logo" href="index.html"><span class="logo__name">WHITAKERS</span><span class="logo__sub">Jewellers since 1903</span></a>
+    <button class="nav-toggle" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    <nav class="nav" aria-label="Main">
+      <a href="custom-design.html">Custom Design</a>
+      <a href="custom-design.html#engagement">Engagement</a>
+      <a href="custom-design.html#wedding">Wedding</a>
+      <a href="custom-design.html#remodel">Remodel</a>
+      <a href="index.html#story">Our Story</a>
+      <a href="https://whitakers.com.au/collections/shop-all">Shop</a>
+      <a class="btn" href="#book">Book a Consultation</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="page-hero">
+    <div class="wrap">
+      <span class="eyebrow">Contact</span>
+      <h1>Let's start your design</h1>
+      <p class="lede">Tell us a little about what you have in mind and we'll arrange a no-obligation consultation at our Charlestown showroom.</p>
+    </div>
+  </section>
+
+  <section class="section" id="book">
+    <div class="wrap split" style="align-items:start">
+      <form class="form" data-enquiry>
+        <div class="full">
+          <label>What are you creating?</label>
+          <div class="chips">
+            <label><input type="radio" name="type" value="engagement" checked><span>Engagement ring</span></label>
+            <label><input type="radio" name="type" value="wedding"><span>Wedding band</span></label>
+            <label><input type="radio" name="type" value="remodel"><span>Remodel an heirloom</span></label>
+            <label><input type="radio" name="type" value="other"><span>Something else</span></label>
+          </div>
+        </div>
+        <div><label for="name">Name</label><input id="name" required></div>
+        <div><label for="phone">Phone</label><input id="phone" type="tel"></div>
+        <div class="full"><label for="email">Email</label><input id="email" type="email" required></div>
+        <div><label for="budget">Approximate budget</label>
+          <select id="budget"><option>Not sure yet</option><option>Under $3,000</option><option>$3,000 – $6,000</option><option>$6,000 – $10,000</option><option>$10,000 – $20,000</option><option>$20,000+</option></select></div>
+        <div><label for="when">When do you need it?</label>
+          <select id="when"><option>No rush</option><option>Within 3 months</option><option>Within 6 weeks</option><option>As soon as possible</option></select></div>
+        <div class="full"><label for="idea">Tell us about your idea</label><textarea id="idea" placeholder="Stone shape, metal, a photo you love, a family piece you'd like to reuse..."></textarea></div>
+        <div class="full"><button class="btn" type="submit">Request a Consultation</button></div>
+      </form>
+
+      <div>
+        <span class="eyebrow">Find our store</span>
+        <h3>Whitakers Jewellers</h3>
+        <p>212 Pacific Highway<br>Charlestown NSW</p>
+        <p><a href="tel:0249270100">02 4927 0100</a><br><a href="mailto:retail@whitakers.com.au">retail@whitakers.com.au</a></p>
+        <h4 class="eyebrow" style="margin-top:32px">Opening hours</h4>
+        <p>Tuesday to Friday: 10am – 5pm<br>Saturday: 9am – 3pm<br>Closed Sundays, Mondays and Public Holidays</p>
+        <p><a class="btn btn--ghost" href="https://maps.google.com/?q=Whitakers+Jewellers+212+Pacific+Highway+Charlestown">Get Directions</a></p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer data-footer></footer>
+<script src="assets/main.js"></script>
+</body>
+</html>
