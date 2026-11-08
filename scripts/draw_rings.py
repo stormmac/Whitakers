@@ -381,6 +381,51 @@ def emerald_pendant():
         a = math.radians(q); b += claw(cx + 37 * math.cos(a), cy + 51 * math.sin(a), 4, 'metal', st)
     return frame(W, H, 'yellow', b, '110 70 480 360')
 
-for name, fn in (('before-band', dress_band), ('after-band', solitaire_six), ('before-onyx', onyx_cocktail), ('after-onyx', onyx_eastwest), ('before-filigree', filigree_emerald), ('after-filigree', emerald_stacker), ('before-emerald-cluster', emerald_cluster), ('after-emerald-pendant', emerald_pendant), ('before-cluster', cluster_1950s), ('before-deco', deco_1920s), ('before-illusion', illusion_1970s), ('before-brooch', brooch_1910s), ('marquise', marquise_ring), ('sapphire', sapphire_ring), ('oval', oval_ring), ('hidden-halo', hidden_halo)):
+
+# AFTER 5b. Bezel-set trilogy: the centre diamond with two of the smaller diamonds, each in a clean bezel, rose gold
+def bezel_trilogy():
+    W, H, cx, cy = 700, 520, 350, 240; st = MET['rose']
+    b = f'<ellipse cx="{cx}" cy="{cy+150}" rx="270" ry="20" fill="#9a7766" opacity=".22" filter="url(#shadow)"/>'
+    b += band(W, cy + 40, 330, 40, 30, 8, False, st)
+    for sgn in (-1, 1):
+        x = cx + sgn * 104
+        b += f'<polygon points="{pts(octagon(x, cy + 6, 74, 74, 18))}" fill="url(#metal)" stroke="{st}" stroke-width="2"/>'
+        b += facets(ellipse(x, cy + 6, 28, 28, 14), x, cy + 6, DIAMOND, sgn)
+    b += f'<polygon points="{pts(octagon(cx, cy, 120, 120, 30))}" fill="url(#metal)" stroke="{st}" stroke-width="2.5"/>'
+    b += facets(ellipse(cx, cy, 48, 48, 18), cx, cy, DIAMOND, 4)
+    return frame(W, H, 'rose', b, '110 90 480 360')
+
+# AFTER 6b. The emerald-cut onyx set east-west across a ridged triple band, rose gold
+def onyx_ridged():
+    W, H, cx, cy = 700, 520, 350, 230; st = MET['rose']
+    b = f'<ellipse cx="{cx}" cy="{cy+160}" rx="270" ry="20" fill="#9a7766" opacity=".22" filter="url(#shadow)"/>'
+    for k, dy in enumerate((-34, 0, 34)):
+        b += band(W, cy + 60 + dy, 330, 26, 20, 10, False, st)
+    b += f'<polygon points="{pts(octagon(cx, cy + 56, 170, 116, 18))}" fill="url(#metal)" stroke="{st}" stroke-width="2"/>'
+    b += facets(octagon(cx, cy + 56, 152, 98, 14), cx, cy + 56, ONYX, 3)
+    return frame(W, H, 'rose', b, '110 90 480 360')
+
+# AFTER 7b. Bypass ("tension style") ring: the emerald held east-west between two sweeping ends, white gold
+def emerald_bypass():
+    W, H, cx, cy = 700, 520, 350, 250; st = MET['white']
+    b = f'<ellipse cx="{cx}" cy="{cy+150}" rx="270" ry="20" fill="#7c828a" opacity=".22" filter="url(#shadow)"/>'
+    b += f'<path d="M{cx-250} {cy+70} C {cx-180} {cy-60} {cx-110} {cy-40} {cx-62} {cy+4}" fill="none" stroke="url(#metal)" stroke-width="30" stroke-linecap="round"/>'
+    b += f'<path d="M{cx+250} {cy-10} C {cx+200} {cy+110} {cx+110} {cy+60} {cx+62} {cy+12}" fill="none" stroke="url(#metal)" stroke-width="30" stroke-linecap="round"/>'
+    b += facets(ellipse(cx, cy + 8, 64, 42, 20), cx, cy + 8, EMERALD, 6)
+    return frame(W, H, 'white', b, '110 90 480 360')
+
+# AFTER 8b. The emerald in a gold bezel, suspended inside a gold circle pendant
+def emerald_circle():
+    W, H, cx, cy = 700, 520, 350, 290; st = MET['yellow']
+    b = f'<path d="M150 60 Q {cx} {cy-60} 550 60" fill="none" stroke="url(#metalV)" stroke-width="3"/>'
+    b += f'<path d="M150 60 Q {cx} {cy-60} 550 60" fill="none" stroke="{st}" stroke-width="1" stroke-dasharray="3 3" opacity=".6"/>'
+    b += f'<ellipse cx="{cx}" cy="{cy-104}" rx="9" ry="15" fill="none" stroke="url(#metal)" stroke-width="5"/>'
+    b += f'<circle cx="{cx}" cy="{cy}" r="86" fill="none" stroke="url(#metalV)" stroke-width="12"/>'
+    b += f'<line x1="{cx}" y1="{cy-80}" x2="{cx}" y2="{cy-36}" stroke="url(#metalV)" stroke-width="5"/>'
+    b += f'<ellipse cx="{cx}" cy="{cy+4}" rx="32" ry="40" fill="url(#metal)" stroke="{st}" stroke-width="1.5"/>'
+    b += facets(ellipse(cx, cy + 4, 24, 32, 18, math.pi / 18), cx, cy + 4, EMERALD, 3)
+    return frame(W, H, 'yellow', b, '110 70 480 360')
+
+for name, fn in (('after-trilogy', bezel_trilogy), ('after-onyx-ridged', onyx_ridged), ('after-emerald-bypass', emerald_bypass), ('after-emerald-circle', emerald_circle), ('before-band', dress_band), ('before-onyx', onyx_cocktail), ('before-filigree', filigree_emerald), ('before-emerald-cluster', emerald_cluster), ('before-cluster', cluster_1950s), ('before-deco', deco_1920s), ('before-illusion', illusion_1970s), ('before-brooch', brooch_1910s), ('marquise', marquise_ring), ('sapphire', sapphire_ring), ('oval', oval_ring), ('hidden-halo', hidden_halo)):
     open(OUT + name + '.svg', 'w').write(fn())
 print('ok')
